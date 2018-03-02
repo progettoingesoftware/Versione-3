@@ -1,6 +1,8 @@
-package it.ing.sw.v3;
+package it.ing.sw.v2;
 
+import java.time.LocalDate;
 import java.util.Vector;
+
 import it.ing.sw.InputDati;
 
 /**
@@ -15,11 +17,14 @@ public class InserimentoRisorsa
     public static final String INS_ALTRO_AUTORE = "Vuoi inserire un altro autore (S/N)?\n";
     public static final String INS_NUMPAGINE = "Inserisci il numero delle pagine del libro:\n";
     public static final String INS_ANNOP = "Inserisci l'anno di pubblicazione del libro:\n";
-    public static final int ANNO_CORRENTE = 2018;
+    public static final int ANNO_CORRENTE = LocalDate.now().getYear();
     public static final String INS_CASAED = "Inserisci la casa editrice del libro:\n";
     public static final String INS_LINGUA = "Inserisci la lingua in cui e' scritto il libro:\n";
     public static final String INS_GENERE = "Inserisci il genere del libro:\n";
-	
+    
+    public static final int MIN_LICENZE = 0;
+    public static final int MAX_LICENZE = 20;
+    public static final int MIN_ANNOP = 1900;
     
     /**
      * Metodo per l'acquisizione dei dati relativi ad un libro
@@ -28,7 +33,7 @@ public class InserimentoRisorsa
 	public static Libro inserisciLibro()
     {
     	    String t = InputDati.leggiStringaNonVuota(INS_TITOLO);
-    	    int nl = InputDati.leggiIntero(INS_NUMLICENZE, 0, 500);
+    	    int nl = InputDati.leggiIntero(INS_NUMLICENZE, MIN_LICENZE, MAX_LICENZE);
     	    boolean end = false;
     	    Vector <String> a = new Vector <String> ();
     	    
@@ -43,7 +48,7 @@ public class InserimentoRisorsa
     	    }while(!end);
     	    
     	    int np = InputDati.leggiIntero(INS_NUMPAGINE);
-    	    int ap = InputDati.leggiIntero(INS_ANNOP, 100, ANNO_CORRENTE);
+    	    int ap = InputDati.leggiIntero(INS_ANNOP, MIN_ANNOP, ANNO_CORRENTE);
     	    String ce = InputDati.leggiStringaNonVuota(INS_CASAED);
     	    String l = InputDati.leggiStringaNonVuota(INS_LINGUA);
     	    String g = InputDati.leggiStringaNonVuota(INS_GENERE);

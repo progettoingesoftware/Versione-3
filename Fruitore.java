@@ -1,8 +1,12 @@
-package it.ing.sw.v3;
+package it.ing.sw.v1;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import it.ing.sw.v2.Risorsa;
+import it.ing.sw.v3.ArchivioPrestiti;
+import it.ing.sw.v3.Prestito;
 
 /**
  * Questa classe rappresenta il modello di un Fruitore
@@ -79,12 +83,27 @@ public class Fruitore extends Utente implements Serializable
      */
     public void setDataDiScadenza(LocalDate nuovads)
     {
-   	 	 dataDiScadenza = nuovads;
+   	 	dataDiScadenza = nuovads;
     }
     
     public String visualizzaPrestitiInCorso(ArchivioPrestiti ap)
     {
-    	     return ap.getPrestiti(this.getUsername());;
+    	return ap.getPrestiti(this.getUsername());
+    }
+    
+    public boolean rinnovaIscrizione(AnagraficaFruitori af)
+    {
+    	return af.rinnovoIscrizioneFruitore(getUsername());
+    }
+    
+    public void registraNuovoPrestito(ArchivioPrestiti ap, Prestito p)
+    {
+    	ap.aggiungiPrestito(p);
+    }
+    
+    public boolean registraProrogaPrestito(ArchivioPrestiti ap, Prestito p)
+    {
+    	return ap.prorogaPrestito(p);
     }
     
     /**

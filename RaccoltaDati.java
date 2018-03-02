@@ -1,6 +1,9 @@
-package it.ing.sw.v3;
+package it.ing.sw.v1;
 
 import java.io.Serializable;
+
+import it.ing.sw.v2.Archivio;
+import it.ing.sw.v3.ArchivioPrestiti;
 
 /**
  * Questa classe rappresenta un raccoglitore di dati, utile per la memorizzazione su file
@@ -16,6 +19,7 @@ public class RaccoltaDati implements Serializable
 	private AnagraficaFruitori af;
     private AnagraficaOperatori ao;
     private Archivio arc;
+    private ArchivioPrestiti ap;
     
     /**
      * Metodo costruttore della classe RaccoltaAnagrafiche
@@ -27,11 +31,12 @@ public class RaccoltaDati implements Serializable
      * @param af: anagrafica dei fruitori
      * @param ao: anagrafica operatori
      */
-    public RaccoltaDati(AnagraficaFruitori af, AnagraficaOperatori ao, Archivio arc)
+    public RaccoltaDati(AnagraficaFruitori af, AnagraficaOperatori ao, Archivio arc, ArchivioPrestiti ap)
     {
     	   this.af = af;
     	   this.ao = ao;
     	   this.arc = arc;
+    	   this.ap = ap;
     }
     
     /**
@@ -50,6 +55,11 @@ public class RaccoltaDati implements Serializable
     public Archivio getArchivio()
    	{
    		return arc;
+   	}
+    
+    public ArchivioPrestiti getArchivioPrestiti()
+   	{
+   		return ap;
    	}
     
 }

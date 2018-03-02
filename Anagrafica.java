@@ -1,4 +1,4 @@
-package it.ing.sw.v3;
+package it.ing.sw.v1;
 
 import java.io.Serializable;
 import java.time.*;

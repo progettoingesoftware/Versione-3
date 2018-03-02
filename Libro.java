@@ -1,4 +1,4 @@
-package it.ing.sw.v3;
+package it.ing.sw.v2;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -21,7 +21,7 @@ public class Libro extends Risorsa implements Serializable
     private String lingua;
     private String genere;
     
-    public static final String DESCRIZIONE_LIBRO = "\nTitolo: %s\nAutore/i: %s\nNumero licenze: %d\nNumero pagine: %d\nAnno di pubblicazione: %d\nCasa editrice: %s\nLingua: %s\nGenere: %s\n";
+    public static final String DESCRIZIONE_LIBRO = "Titolo: %s\n\t\tAutore/i: %s\n\t\tNumero licenze: %d\n\t\tNumero pagine: %d\n\t\tAnno di pubblicazione: %d\n\t\tCasa editrice: %s\n\t\tLingua: %s\n\t\tGenere: %s\n";
     
     /**
      * Metodo costruttore della classe Libro
@@ -41,7 +41,6 @@ public class Libro extends Risorsa implements Serializable
     public Libro(int licenze, String t, Vector <String> a, int np, int ap, String ce, String l, String g)
     {
     	   super(t, licenze);
-    	   autore_i = new Vector <String> ();
     	   this.autore_i = a;
     	   this.titolo = t;
     	   this.numPagine = np;

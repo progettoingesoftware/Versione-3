@@ -1,14 +1,22 @@
-package it.ing.sw.v3;
+package it.ing.sw.v1;
 
 import java.io.File;
+import java.util.Vector;
+
 import it.ing.sw.*;
+import it.ing.sw.v2.Archivio;
+import it.ing.sw.v2.Categoria;
+import it.ing.sw.v2.Libro;
+import it.ing.sw.v2.SottoCategoria;
+import it.ing.sw.v3.ArchivioPrestiti;
+import it.ing.sw.v3.GestoreMenu;
 
 public class Main 
 {
-	public static final String NOME_FILE = "gestoreRisorse.dat";								
+	public static final String NOME_FILE = "gestoreRisorse.txt";								
 	public static final String MSG_NO_CAST = "ATTENZIONE PROBLEMI CON IL CAST";			
 	public static final String MSG_OK_FILE = "CARICAMENTO DA FILE EFFETTUATO";			
-	public static final String MSG_NO_FILE = "CARICAMENTO DA FILE NON RIUSCITO. OCCORRE CREARE UNA NUOVA LISTA UTENTI E UNA NUOVA LISTA BLOG";			
+	public static final String MSG_NO_FILE = "CARICAMENTO DA FILE NON RIUSCITO. OCCORRE CREARE UNA NUOVA ANAGRAFICA DEI FRUITORI";			
 	public static final String MSG_SALVA = "SALVATAGGIO DATI";
 	public static final String ERRORE_CONVERSIONE_DATA = "Attenzione! Si e' verificato un errore di conversione della data";	
 	
@@ -43,18 +51,47 @@ public class Main
 	 */
 	public static void creaStrutturaArchivio(Archivio arc)
 	{
-		Categoria c = new Categoria("Libri");
+		final int DURATA_PRESTITO = 30;
+		final int DURATA_PROROGA = 20;
+		final int RICHIESTA_PROROGA = 10;
+		final int MAX_PRESTITI = 3;
+
+		Categoria c = new Categoria("Libri", DURATA_PRESTITO, DURATA_PROROGA, RICHIESTA_PROROGA, MAX_PRESTITI);
 		arc.aggiungiCategoria(c);
 	    c.inizializzaElencoSottoCategorie();
 	    
-	    SottoCategoria s1 = new SottoCategoria("Classici");
-	    SottoCategoria s2 = new SottoCategoria("Gialli");
-	    SottoCategoria s3 = new SottoCategoria("Fantascienza");
+	    SottoCategoria s1 = new SottoCategoria("Didattica");
+	    SottoCategoria s2 = new SottoCategoria("Classici");
+	    SottoCategoria s3 = new SottoCategoria("Fantasy");
 	    SottoCategoria s4 = new SottoCategoria("Per ragazzi");
+	    SottoCategoria s5 = new SottoCategoria("Gialli");
+
 	    c.aggiungiSottoCategoria(s1);
 	    c.aggiungiSottoCategoria(s2);
 	    c.aggiungiSottoCategoria(s3);
 	    c.aggiungiSottoCategoria(s4);
+	    c.aggiungiSottoCategoria(s5);
+	    
+	    Vector <String> a1 = new Vector <String> ();
+	    a1.add("Antoine de Saint_Exupéry");
+	    Vector <String> a2 = new Vector <String> ();
+	    a2.add("J.R.R. Tolkien");
+	    Vector <String> a3 = new Vector <String> ();
+	    a3.add("George Orwell");
+	    Vector <String> a4 = new Vector <String> ();
+	    a4.add("E.Gamma");
+	    a4.add("R.Helm");
+	    a4.add("R.Johnson");
+	    a4.add("J.Vlissides");
+	    
+	    Libro l1 = new Libro(10, "Il piccolo principe", a1, 137, 2015, "Newton Compton", "italiano", "Per ragazzi");
+	    Libro l2 = new Libro(5, "Il signore degli anelli", a2, 1264, 2017, "Bompiani", "italiano", "Fantasy");
+	    Libro l3 = new Libro(8, "Animal Farm", a3, 112, 2008, "Penguin Books", "english", "Classici");
+	    Libro l4 = new Libro(1, "Design Patterns", a4, 395, 2002, "Pearson", "italiano", "Didattica");
+	    s1.aggiungiRisorsa(l4);
+	    s2.aggiungiRisorsa(l3);
+	    s3.aggiungiRisorsa(l2);
+	    s4.aggiungiRisorsa(l1);
 	}
 	
 	/**
@@ -64,16 +101,19 @@ public class Main
 	public static void main(String[] args) 
 	{
         File gestoreRisorse = new File(NOME_FILE);
+        
         RaccoltaDati rd = null;
         AnagraficaFruitori af = null;
         AnagraficaOperatori ao = null;
         Archivio arc = null;
-		boolean caricamentoRiuscito = false;
+        ArchivioPrestiti ap = null;
+
+        boolean caricamentoRiuscito = false;
 		
 		/**
 		 * Tale istruzione verifica se il file in questione esiste all'interno del sistema di memorizzazione locale.
 		 * In questo caso vengono estrapolate sia la RaccoltaDati sia l'AnagraficaFruitori, l'AnagraficaOperatori e l'Archivio, venendo salvati nelle variabili opportune.
-		 * Le probabili eccezioni vengono gestite secondo la modalita'� piu' adatta al tipo di eccezione ed infine viene mostrato un messaggio di conferma se il caricamento da file gia' esistente si e' concluso con successo
+		 * Le probabili eccezioni vengono gestite secondo la modalità piu' adatta al tipo di eccezione ed infine viene mostrato un messaggio di conferma se il caricamento da file gia' esistente si e' concluso con successo
 		 */
 		if (gestoreRisorse.exists())
 		{
@@ -89,6 +129,7 @@ public class Main
 				af = rd.getAnagraficaFruitori();
 				ao = rd.getAnagraficaOperatori();
 				arc = rd.getArchivio();
+				ap = rd.getArchivioPrestiti();
 			}
 			catch (ClassCastException e)
 			{
@@ -100,7 +141,7 @@ public class Main
 			}
 			finally
 			{
-				if (af != null && ao != null && arc != null)
+				if (af != null && ao != null && arc != null && ap != null)
 				{
 					System.out.println(MSG_OK_FILE);
 					caricamentoRiuscito = true;
@@ -117,6 +158,7 @@ public class Main
 			af = new AnagraficaFruitori();
 			ao = new AnagraficaOperatori();
 			arc = new Archivio();
+			ap = new ArchivioPrestiti();
 			
 			aggiuntaOperatoriPreimpostati(ao);
 			creaStrutturaArchivio(arc);
@@ -126,13 +168,13 @@ public class Main
 		 * Viene costruito un nuovo gestore menu' che possa dare avvio alla logica del sistema applicativo 
 		 */
 		GestoreMenu g = new GestoreMenu();
-		g.logicaMenu(af, ao, arc);
+		g.logicaMenu(af, ao, arc, ap);
 		
 		/**
 		 * L'operazione di salvataggio prevede la costruzione di una nuova RaccoltaDati attraverso i parametri AnagraficaFruitori, AnagraficaOperatori e Archivio e l'aggiornamento del file in gestoreRisorse
 		 */
 		System.out.println(MSG_SALVA);
-		rd = new RaccoltaDati(af, ao, arc);
+		rd = new RaccoltaDati(af, ao, arc, ap);
 	    ServizioFile.salvaSingoloOggetto(gestoreRisorse, rd);	
 	}
 	

@@ -1,6 +1,10 @@
-package it.ing.sw.v3;
+package it.ing.sw.v1;
 
 import java.io.Serializable;
+
+import it.ing.sw.v2.Archivio;
+import it.ing.sw.v2.Categoria;
+import it.ing.sw.v2.Risorsa;
 
 /**
  * Questa classe rappresenta il modello di un Operatore

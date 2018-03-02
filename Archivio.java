@@ -1,4 +1,4 @@
-package it.ing.sw.v3;
+package it.ing.sw.v2;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -16,7 +16,6 @@ public class Archivio implements Serializable
 	private Vector <Categoria> elencoCategorie;
 	
 	public static final String DESCRIZIONE_ARCHIVIO = "\nL'archivio presenta il seguente contenuto:\n";
-	public static final String ARCHIVIO_VUOTO ="\nL'archivio e' vuoto";
 	
 	/**
 	 * Metodo costruttore della classe Archivio
@@ -29,45 +28,13 @@ public class Archivio implements Serializable
 	}
 	
 	/**
-	 * Data una stringa n, questo metodo restituisce l'oggetto Categoria avente n come nome, se e' presente
-	 * 
-	 * Pre: elencoCategorie != null
-	 * 
-	 * @param n: il nome di una categoria
-	 * @return l'oggetto Categoria avente n come nome altrimenti null
+	 * Metodo get della classe Archivio
 	 */
-	public Categoria getCategoria(String n)
+	public Vector <Categoria> getElencoCategorie()
 	{
-		for(int i = 0; i < elencoCategorie.size(); i++)
-		{
-			Categoria c = elencoCategorie.get(i);
-			if(c.getNome().equalsIgnoreCase(n))
-				  return c;
-		}
-	
-		return null;
+		return elencoCategorie;
 	}
-	
-	/**
-	 * Data una stringa n, questo metodo verifica la presenza di una categoria nell'elenco delle categorie avente come nome n
-	 * 
-	 * Pre: elencoCategorie != null
-	 * 
-	 * @param n: una stringa
-	 * @return true se nell'elenco delle categorie e' presente una categoria avente come nome n
-	 */
-	public boolean verificaPresenzaCategoria(String n)
-	{
-		for(int i = 0; i < elencoCategorie.size(); i++)
-		{
-			Categoria c = elencoCategorie.get(i);
-			if(c.getNome().equalsIgnoreCase(n))
-				  return true;
-		}
 		
-		return false;
-	}
-	
 	/**
 	 * Metodo per l'aggiunta di una categoria all'archivio, viene invocato al momento della creazione della struttura
 	 * dell'archivio nel Main
@@ -79,6 +46,26 @@ public class Archivio implements Serializable
 	public void aggiungiCategoria(Categoria c)
 	{
 		elencoCategorie.add(c);
+	}
+	
+	/**
+	 * Metodo per la semplice stampa dell'elenco dei nomi delle categorie presenti in archivio
+	 * 
+	 * Pre: elencoCategorie != null
+	 * 
+	 * @return la stringa con l'elenco dei nomi delle categorie dell'archivio
+	 */
+	public String stampaElencoCategorie()
+	{
+		StringBuffer ris = new StringBuffer();
+		   
+		for(int i = 0; i < elencoCategorie.size(); i++)
+		{
+			   Categoria c = elencoCategorie.get(i);
+			   ris.append(i+1 + ")" + c.getNome() + "\n");
+		}
+		   
+	    return ris.toString();
 	}
 	
 	/**

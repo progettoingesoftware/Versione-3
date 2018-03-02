@@ -1,4 +1,4 @@
-package it.ing.sw.v3;
+package it.ing.sw.v2;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -19,25 +19,25 @@ public class Categoria implements Serializable
    protected Vector <Risorsa> elencoRisorse;
    private Vector <SottoCategoria> elencoSottoCategorie;
    
-   private int numeroMaxGiorniPrestito;//////
-   private int numeroMaxGiorniProroga;//////
-   private int numeroGiorniRichiestaProroga;//////
-   private int numeroMaxRisorseInPrestito;///////
+   private int numeroMaxGiorniPrestito;
+   private int numeroMaxGiorniProroga;
+   private int numeroGiorniRichiestaProroga;
+   private int numeroMaxRisorseInPrestito;
 
-   public static final String DESCRIZIONE_CATEGORIA_SEMPLICE = "\nNome categoria: %s\nRisorse in essa contenute:\n";
-   public static final String DESCRIZIONE_CATEGORIA_COMPOSTA = "\nNome categoria: %s\nSottocategorie in essa contenute:\n";
+   public static final String DESCRIZIONE_CATEGORIA_SEMPLICE = "Nome categoria: %s\nRisorse in essa contenute:\n";
+   public static final String DESCRIZIONE_CATEGORIA_COMPOSTA = "Nome categoria: %s\nSottocategorie in essa contenute:\n";
    
    /**
     * Metodo costruttore della classe Categoria
     * @param n: il nome della categoria
     */
-   public Categoria(String n, int numPres, int numMaxPro, int numRiPro, int numRis)//////
+   public Categoria(String n, int numPres, int numMaxPro, int numRiPro, int numRis)
    {
 	   this.nomeCategoria = n;
-	   this.numeroMaxGiorniPrestito = numPres;///////
-	   this.numeroMaxGiorniProroga = numMaxPro;//////
-	   this.numeroGiorniRichiestaProroga = numRiPro;////////
-	   this.numeroMaxRisorseInPrestito = numRis;////////
+	   this.numeroMaxGiorniPrestito = numPres;
+	   this.numeroMaxGiorniProroga = numMaxPro;
+	   this.numeroGiorniRichiestaProroga = numRiPro;
+	   this.numeroMaxRisorseInPrestito = numRis;
    }
    
    /**
@@ -96,7 +96,7 @@ public class Categoria implements Serializable
 	   return numeroMaxRisorseInPrestito;
    }
      
-   public Vector <Risorsa> getElencoRisorse()    //da vedere se serve (non ancora usato)
+   public Vector <Risorsa> getElencoRisorse()  
    {
 	   return elencoRisorse;
    }
@@ -126,26 +126,6 @@ public class Categoria implements Serializable
 	   return null;
    }
     
-   /**
-    * Data una stringa n, questo metodo verifica la presenza di una risorsa nell'elenco delle risorse avente come nome n
-    * 
-    * Pre: elencoRisorse != null
-    * 
-    * @param n: una stringa
-    * @return true se nell'elenco delle risorse e' presente una risorsa avente come nome n
-    */
-   public boolean verificaPresenzaRisorsa(String n)
-   {
-	   for(int i = 0; i < elencoRisorse.size(); i++)
-	   {
-		   Risorsa r = elencoRisorse.get(i);
-		   if(r.getNome().equalsIgnoreCase(n))
-			   return true;
-	   }
-	   
-	   return false;
-   }
-   
    /**
     * Metodo che permette l'aggiunta di una risorsa all'elenco delle risorse 
     * 
@@ -185,16 +165,34 @@ public class Categoria implements Serializable
 	   elencoSottoCategorie.add(sc);
    }
    
+   /**
+    * Metodo per la semplice stampa dell'elenco dei nomi delle risorse contenuti in elencoRisorse
+    *
+    * Pre: elencoRisorse != null
+    * 
+    * @return la stringa con l'elenco dei nomi delle risorse
+    */
+   public String stampaElencoRisorse()
+   {
+      StringBuffer ris = new StringBuffer();
+ 	   
+ 	   for(int i = 0; i < elencoRisorse.size(); i++)
+ 	   {
+ 		   Risorsa r = elencoRisorse.get(i);
+ 		   ris.append(i+1 + ")"+ r.getNome() + "\n");
+ 	   }
+ 	   
+ 	   return ris.toString();
+   }
    
    /**
     * Metodo per la semplice stampa dell'elenco dei nomi delle sottocategorie associato ad una categoria
     * 
     * Pre: (c != null) && (elencoSottoCategorie != null)
     * 
-    * @param c: la categoria di cui si vuole stampare l'elenco dei nomi delle sottocategorie ad essa associate
     * @return la stringa con l'elenco dei nomi delle sottocategorie
     */
-   public String stampaElencoSottocategorie(Categoria c)
+   public String stampaElencoSottocategorie()
    {
 	   StringBuffer ris = new StringBuffer();
 	   
@@ -209,7 +207,7 @@ public class Categoria implements Serializable
    
    /**
     * Metodo toString() per la creazione di una stringa descrittiva contenente i vari attributi dell'oggetto Categoria.
-    * Se il vettore elencoSottoCategorie è null, si invoca il metodo toString() per ogni risorsa in elencoRisorse altrimenti
+    * Se il vettore elencoSottoCategorie e' null, si invoca il metodo toString() per ogni risorsa in elencoRisorse altrimenti
     * si invoca il metodo toString() per ogni sottoCategoria in elencoSottoCategorie
     * @return la stringa descrittiva della categoria
     */
@@ -234,7 +232,7 @@ public class Categoria implements Serializable
 		   for(int i = 0; i < elencoSottoCategorie.size(); i++)
 	       {
 		      SottoCategoria s = elencoSottoCategorie.get(i);
-		      ris.append(i+1 + ")"+ s.toString());
+		      ris.append("t" + (i+1) + ")"+ s.toString());
 	       }
 	   }
 	   

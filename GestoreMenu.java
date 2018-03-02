@@ -3,6 +3,20 @@ package it.ing.sw.v3;
 import java.io.Serializable;
 import java.time.DateTimeException;
 import it.ing.sw.*;
+import it.ing.sw.v1.Anagrafica;
+import it.ing.sw.v1.AnagraficaFruitori;
+import it.ing.sw.v1.AnagraficaOperatori;
+import it.ing.sw.v1.Fruitore;
+import it.ing.sw.v1.Menu;
+import it.ing.sw.v1.Operatore;
+import it.ing.sw.v1.Utente;
+import it.ing.sw.v2.Archivio;
+import it.ing.sw.v2.Categoria;
+import it.ing.sw.v2.InserimentoRisorsa;
+import it.ing.sw.v2.Libro;
+import it.ing.sw.v2.Risorsa;
+import it.ing.sw.v2.SottoCategoria;
+
 import java.time.*;
 
 /**
@@ -37,8 +51,8 @@ public class GestoreMenu implements Serializable
     public static final String INS_COGNOME = "Inserisci il tuo cognome: ";
     public static final String INS_USERNAME = "Inserisci il tuo username: ";
     public static final String INS_PASSWORD = "Inserisci la tua password: ";
-    public static final String INS_GIORNO_NASCITA = "Inserisci il tuo giorno di nascita: ";
-    public static final String INS_MESE_NASCITA = "Inserisci il tuo mese di nascita: ";
+    public static final String INS_GIORNO_NASCITA = "Inserisci il tuo giorno di nascita (in cifre): ";
+    public static final String INS_MESE_NASCITA = "Inserisci il tuo mese di nascita (in cifre): ";
     public static final String INS_ANNO_NASCITA = "Inserisci il tuo anno di nascita (indicare 4 cifre): ";
 
     public static final String ISCRIZIONE_OK = "Complimenti, iscrizione avvenuta con successo!\n";
@@ -58,18 +72,33 @@ public class GestoreMenu implements Serializable
 	public static final String RICHIESTA_PROSECUZIONE = "Si desidera riprovare? (S/N)\n";
 	public static final String ERRORE = "Si e' verificato un errore\n";
 
-    public static final String INS_NOME_C = "Inserisci il nome della categoria a cui aggiungere la risorsa:\n";
-	public static final String INS_SUCCESSO = "L'inserimento e' avvenuto con successo\n";
-    public static final String RISORSA_PRESENTE = "Attenzione! La risorsa e' gia'  presente nell'archivio";
-    public static final String INS_IN_SOTTO = "La categoria %s presenta queste sottocategorie:\n%s";
-    public static final String INS_COMUNQUE = "Vuoi inserire la risorsa in una sottocategoria (S/N)\n";
-    public static final String INS_NUMERO_SOTTOC =  "Inserisci il numero della sottocategoria a cui aggiungere la risorsa:\n";
-    public static final String INS_NON_VALIDO = "Il nome della categoria inserita non e' presente in archivio\n";
-    public static final String INS_NOME_SOTTOC = "Inserisci il nome della sottocategoria a cui aggiungere la risorsa:\n";
-    
-    
-    
-    
+	public static final String CONTENUTO_ARC = "L'archivio contiene le seguenti categorie:\n%s";
+	public static final String CONTENUTO_CAT = "La categoria %s contiene queste risorse:\n%s";
+	public static final String CONTENUTO_SOTTO = "La sottocategoria %s contiene queste risorse:\n%s"; 
+	
+	public static final String OP_SUCCESSO = "L'operazione e' avvenuta con successo\n";
+    public static final String OP_NO_SUCCESSO_AGGIUNTA = "Attenzione! La risorsa e' gia'  presente nell'archivio oppure la risorsa non e' compatibile con la sottocategoria dove si vuole inserirla\n";
+    public static final String OP_NO_SUCCESSO_PRESTITO = "Attenzione! La risorsa indicata non e' presente in archivio e/o non e' disponibile\n";
+    public static final String OP_NO_SUCCESSO_PROROGA = "Attenzione! Non e' stato possibile effettuare la proroga richiesta\n";
+
+    public static final String INS_NUMERO_CAT = "Inserisci il numero della categoria a cui aggiungere/rimuovere la risorsa:";
+    public static final String INS_IN_SOTTO = "La categoria %s contiene queste sottocategorie:\n%s";
+    public static final String INS_PROCEDERE_SOTTO = "Vuoi proseguire nell'inserimento/rimozione della risorsa in/da una sottocategoria? (S/N)\n";
+    public static final String INS_NUMERO_SOTTOC =  "Inserisci il numero della sottocategoria a cui aggiungere/rimuovere la risorsa:";
+    public static final String INS_NUMERO_RISORSA = "Inserisci il numero della risorsa da rimuovere:";    
+    public static final String INS_PROCEDERE_RISORSA = "Vuoi proseguire nella rimozione della risorsa? (S/N)\n";
+        
+    public static final String INS_NUMERO_CAT_PRESTITO = "Inserisci il numero della categoria di cui vuoi richiedere un prestito:";
+    public static final String INS_NUMERO_SOTTOC_PRESTITO =  "Inserisci il numero della sottocategoria in cui cercare la risorsa:";
+    public static final String INS_NUMERO_RISORSA_PRESTITO = "Inserisci il numero della risorsa da richiedere in prestito:";      
+    public static final String INS_PROCEDERE_PRESTITO_SCELTA_SOTTO = "Vuoi proseguire nella scelta della sottocategoria? (S/N)\n";
+    public static final String INS_PROCEDERE_PRESTITO_SCELTA_RISORSA = "Vuoi proseguire nella scelta della risorsa? (S/N)\n";
+
+    public static final String INS_NUMERO_PRESTITO_PROROGA = "Inserisci il numero del prestito di cui vuoi richiedere la proroga:";      
+
+	public static final int NUM_MINIMO = 1;
+	public static final int NUM_LICENZE_MINIMO = 0;
+
     /**
 	 * Metodo per l'aggiunta di un nuovo fruitore all'elenco dei fruitori gia' presenti all'interno di af.
 	 * Vengono effettuati dei controlli sulla correttezza della data di nascita inserita e sulla possibile presenza di fruitori gia' iscritti in possesso delle medesime credenziali indicate
@@ -277,65 +306,174 @@ public class GestoreMenu implements Serializable
     */
     public void aggiungiRisorsa(Operatore op, Archivio arc)
     {
-    	     Libro nuovol = null;
-    	     SottoCategoria sc = null;
-    	
-    	     String n = InputDati.leggiStringaNonVuota(INS_NOME_C);
-    	    	       
-    	    	 if(arc.verificaPresenzaCategoria(n))
-    	    	 {
-    	    	    	  Categoria c = arc.getCategoria(n);
-    	    	    	       
-    	    	    	  if(c.getElencoSottoCategorie() == null)
-    	    	    	  {
-    	    	    	    	   if(n.equalsIgnoreCase("Libri")) //forse caso inutile perchÃ¨ nel main abbiamo messo delle sottocategorie alla categoria Libro
-    	    	    	    	   {
-    	    	    	    	    	    nuovol = InserimentoRisorsa.inserisciLibro();
-    	    	    	    	    	    
-    	    	    	    	    	    if((c.getRisorsa(nuovol.getNome())) == null) //la risorsa non c'Ã¨ nell'archivio
-    	    	    	    	    	    {
-    	    	    	    	    	        	op.aggiungiRisorsaCategoria(nuovol, c);
-    	    	    	    	    	        	System.out.println(INS_SUCCESSO);
-    	    	    	    	    	    }
-    	    	    	    	    	    else
-    	    	    	    	    	        System.out.println(RISORSA_PRESENTE);
-    	    	    	    	    }
-    	    	    	    	    //cosa simile per film nelle successive versioni
-    	    	    	   }
-    	    	    	   else //sono presenti sottocategorie, devo aggiungere a queste
-    	    	    	   {
-    	    	    	    	    System.out.printf(INS_IN_SOTTO, c.getNome(), c.stampaElencoSottocategorie(c));
-    	    	    	    	       
-    	    	    	    	    if(InputDati.leggiUpperChar(INS_COMUNQUE, "SN") == 'S')
-    	    	    	    	    {
-    	    	    	    	    	    int num = InputDati.leggiIntero(INS_NUMERO_SOTTOC, 1, (c.getElencoSottoCategorie()).size());
-    	    	    	    	    	    sc = (c.getElencoSottoCategorie()).get(num-1);
-    	    	    	    	    	    
-    	    	    	    	    	    if(n.equalsIgnoreCase("Libri"))  //mi serve per sapere che metodo di InserimentoRisorsa invocare
-    	    	    	    	    	    {
-    	    	    	    	    	        nuovol = InserimentoRisorsa.inserisciLibro();
+    	Categoria c = null;
+    	SottoCategoria sc = null;
+    	Libro nuovol = null;
+    	     
+    	System.out.printf(CONTENUTO_ARC, arc.stampaElencoCategorie());
+    	int num1 = InputDati.leggiIntero(INS_NUMERO_CAT, NUM_MINIMO, (arc.getElencoCategorie()).size());
+    	c = (arc.getElencoCategorie()).get(num1-1);
+    	    	
+    	System.out.printf(INS_IN_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
+
+    	if(c.getElencoSottoCategorie() == null)
+    	{
+      	    if((c.getNome()).equalsIgnoreCase("Libri"))  
+    	    {
+    	    	nuovol = InserimentoRisorsa.inserisciLibro();
     	    	    	    	    	       
-    	    	    	    	    	        if((sc.getRisorsa(nuovol.getNome()) == null) && ((nuovol.getGenere()).equalsIgnoreCase(sc.getNome()))) //se il libro non c'Ã¨ nella sottocategoria e il suo genere Ã¨ uguale al nome della sottocategoria
-    	    	    	    	    	        {
-  	    	    	    	    	        	    op.aggiungiRisorsaCategoria(nuovol, sc);
-  	    	    	    	    	        	    System.out.println(INS_SUCCESSO);
-    	    	    	    	    	        }
-    	    	    	    	    	        else
-    	    	    	    	    	        	System.out.println(RISORSA_PRESENTE);
-    	    	    	    	    	    }
-    	    	    	    	    	    //cosa simile per i film nelle successive versioni
-    	    	    	    	     }
-    	    	    	    	     //se digita N, esco da tutto senza fare piÃ¹ nulla
-    	    	    	     }
-    	    	 }
-    	    	 else
-    	    	    	  System.out.println(INS_NON_VALIDO);
-    	    	    	       
+  	    	   	if((c.getRisorsa(nuovol.getNome()) == null))
+  	    	   	{
+  	    	   		op.aggiungiRisorsaCategoria(nuovol, c);
+  	    	    	System.out.println(OP_SUCCESSO);
+  	    	   	}
+  	    	   	else
+  	    	    	System.out.println(OP_NO_SUCCESSO_AGGIUNTA);
+    	    }
+      	    
+    	}
+    	else if(InputDati.leggiUpperChar(INS_PROCEDERE_SOTTO, "SN") == 'S')
+    	{
+    	    int num2 = InputDati.leggiIntero(INS_NUMERO_SOTTOC, NUM_MINIMO, (c.getElencoSottoCategorie()).size());
+    	    sc = (c.getElencoSottoCategorie()).get(num2-1);
+    	    	    	    	    	    
+    	    if((c.getNome()).equalsIgnoreCase("Libri"))  
+    	    {
+    	    	nuovol = InserimentoRisorsa.inserisciLibro();
+    	    	    	    	    	       
+  	    	   	if((sc.getRisorsa(nuovol.getNome()) == null) && ((nuovol.getGenere()).equalsIgnoreCase(sc.getNome())))
+  	    	   	{
+  	    	   		op.aggiungiRisorsaCategoria(nuovol, sc);
+  	    	    	System.out.println(OP_SUCCESSO);
+  	    	   	}
+  	    	   	else
+  	    	    	System.out.println(OP_NO_SUCCESSO_AGGIUNTA);
+    	    }
+    	    
+    	}
+    	
+    }
+    
+    /**
+     * Metodo per la rimozione di una risorsa da una (sotto)categoria dell'archivio
+     * 
+     * Pre: (op != null) && (arc != null)
+     * 
+     * @param op: l'operatore che effettua la rimozione della risorsa
+     * @param arc: l'archivio da cui rimuovere la risorsa
+     */
+    public void rimuoviRisorsa(Operatore op, Archivio arc)
+    {
+       	Categoria c = null;
+	    SottoCategoria sc = null;
+	    Risorsa daEliminare = null;
+	    
+	    System.out.printf(CONTENUTO_ARC, arc.stampaElencoCategorie());
+	    int num1 = InputDati.leggiIntero(INS_NUMERO_CAT, NUM_MINIMO, (arc.getElencoCategorie()).size());
+   	    c = (arc.getElencoCategorie()).get(num1-1);
+   	       	 
+    	System.out.printf(INS_IN_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
+
+  	    if(c.getElencoSottoCategorie() == null)
+	    {
+	    	   System.out.printf(CONTENUTO_CAT, c.getNome(), c.stampaElencoRisorse());
+	    	  
+	    	   int num3 = InputDati.leggiIntero(INS_NUMERO_RISORSA, NUM_MINIMO, (c.getElencoRisorse()).size());
+	    	   daEliminare = (c.getElencoRisorse()).get(num3-1);
+	    	   op.rimuoviRisorsaCategoria(daEliminare, c);
+	    } 
+  	    else if(InputDati.leggiUpperChar(INS_PROCEDERE_SOTTO, "SN") == 'S')
+	    {
+	    	   int num2 = InputDati.leggiIntero(INS_NUMERO_SOTTOC, NUM_MINIMO, (c.getElencoSottoCategorie()).size());
+	    	   sc = (c.getElencoSottoCategorie()).get(num2-1);
+
+	    	   System.out.printf(CONTENUTO_SOTTO, sc.getNome(), sc.stampaElencoRisorse());
+	    	   
+	    	   if(InputDati.leggiUpperChar(INS_PROCEDERE_RISORSA, "SN") == 'S')
+	    	   {
+	    		   int num3 = InputDati.leggiIntero(INS_NUMERO_RISORSA, NUM_MINIMO, (sc.getElencoRisorse()).size());
+	    		   daEliminare = (sc.getElencoRisorse()).get(num3-1);
+	    		   op.rimuoviRisorsaCategoria(daEliminare, sc);
+	    	   }
+	    }   
+   	    
+    }
+    
+    public void aggiungiPrestito(Fruitore f, Archivio arc, ArchivioPrestiti a)
+    {
+    	Categoria c = null;
+    	SottoCategoria sc = null;
+    	Risorsa r = null;
+    	Prestito nuovo = null;
+    	
+    	System.out.printf(CONTENUTO_ARC, arc.stampaElencoCategorie());
+    	int num1 = InputDati.leggiIntero(INS_NUMERO_CAT_PRESTITO, NUM_MINIMO, (arc.getElencoCategorie()).size());
+    	c = (arc.getElencoCategorie()).get(num1-1);
+
+    	if(c.getElencoSottoCategorie() == null)
+    	{
+      	    if((c.getNome()).equalsIgnoreCase("Libri"))  
+    	    {
+      	    	System.out.printf(c.stampaElencoRisorse());
+      	    	
+    	    	int num = InputDati.leggiIntero(INS_NUMERO_RISORSA_PRESTITO, NUM_MINIMO, c.getElencoRisorse().size());
+    	    	
+  	    	   	if(c.getElencoRisorse().get(num-1) != null && c.getElencoRisorse().get(num-1).getNumLicenze() >= NUM_LICENZE_MINIMO)////controllo disponibilità + controllo num max prestiti
+  	    	   	{
+  	    	   		nuovo = new Prestito(c, f, r);
+  	    	   		f.registraNuovoPrestito(a, nuovo);
+  	    	    	System.out.println(OP_SUCCESSO);
+  	    	   	}
+  	    	   	else
+  	    	    	System.out.println(OP_NO_SUCCESSO_PRESTITO);
+    	    }
+      	    
+    	}
+    	else if(InputDati.leggiUpperChar(INS_PROCEDERE_SOTTO, "SN") == 'S')
+    	{
+        	System.out.printf(INS_IN_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
+
+    	    int num2 = InputDati.leggiIntero(INS_NUMERO_SOTTOC_PRESTITO, NUM_MINIMO, (c.getElencoSottoCategorie()).size());
+    	    sc = (c.getElencoSottoCategorie()).get(num2-1);
+    	    	    	    	    	    
+  	    	System.out.printf(sc.stampaElencoRisorse());
+  	    	
+	    	int num = InputDati.leggiIntero(INS_NUMERO_RISORSA_PRESTITO, NUM_MINIMO, c.getElencoRisorse().size());
+	    	
+	    	   	if(c.getElencoRisorse().get(num-1) != null && sc.getElencoRisorse().get(num-1).getNumLicenze() >= NUM_LICENZE_MINIMO)///controllo disponibilità
+	    	   	{
+  	    	   		nuovo = new Prestito(c, f, r);
+  	    	   		f.registraNuovoPrestito(a, nuovo);
+	    	    	System.out.println(OP_SUCCESSO);
+	    	   	}
+	    	   	else
+	    	    	System.out.println(OP_NO_SUCCESSO_PRESTITO);
+    	    
+    	}
+    	
+    }
+    
+    public void richiediProroga(Fruitore f, Archivio arc, ArchivioPrestiti a)
+    {
+    	System.out.printf(f.visualizzaPrestitiInCorso(a));
+    	
+    	int num = InputDati.leggiIntero(INS_NUMERO_PRESTITO_PROROGA, NUM_MINIMO, a.getVettorePrestiti(f.getUsername()).size());
+    	Prestito nuovo = a.getElencoPrestiti().get(num-1);
+    	
+    	if(f.registraProrogaPrestito(a, nuovo))
+    	{
+        	System.out.printf(OP_SUCCESSO);
+    	}
+    	else
+    	{
+        	System.out.printf(OP_NO_SUCCESSO_PROROGA);
+    	}
+    	
     }
     
     /**
      * Vengono inizialmente creati i vari menu' con le relative intestazioni ed opzioni. 
-     * In seguito l'andamento del programma e' scandito attraverso l'aggiornamento della variabile letteraMenu e l'uso di switch-case innestati,
+     * In seguito l'andamento del programma Ã¨ scandito attraverso l'aggiornamento della variabile letteraMenu e l'uso di switch-case innestati,
      * in cui il primo livello (contraddistinto dalle variabili letterali) indica gli specifici menu', mentre il secondo livello (evidenziato
      * dall'uso della variabile intera 'scelta') indica le opzioni relative ad ogni menu' e le operazioni che vengono indi svolte
      * 
@@ -347,7 +485,7 @@ public class GestoreMenu implements Serializable
      * @param ao : oggetto di tipo AnagraficaOperatori
      * @param arc : oggetto di tipo Archivio
      */
-    public void logicaMenu(AnagraficaFruitori af, AnagraficaOperatori ao, Archivio arc)
+    public void logicaMenu(AnagraficaFruitori af, AnagraficaOperatori ao, Archivio arc, ArchivioPrestiti ap)
     {
      	Menu a = new Menu(INTESTAZIONE_A, OPZIONI_A);
 	    Menu b = new Menu(INTESTAZIONE_B, OPZIONI_B);
@@ -367,6 +505,9 @@ public class GestoreMenu implements Serializable
           
         do
         {
+        	af.decadenzaFruitore();
+        	ap.scadenzaPrestito();
+
         	switch(letteraMenu)
     	    {
     	      	case('a'):
@@ -426,7 +567,7 @@ public class GestoreMenu implements Serializable
     	        				     break;
       	        	
     	        	         case 2: letteraMenu = 'b';
-      	                     break;
+	        	        			break;
     	        	     }
     	         	 break;
     	        }
@@ -437,7 +578,7 @@ public class GestoreMenu implements Serializable
  	        	     
  	        	    switch(scelta)
  	        	    {
- 	        	         case 1: if(af.rinnovoIscrizioneFruitore(attualef.getUsername()))
+ 	        	         case 1: if(attualef.rinnovaIscrizione(af))
  	        	                     	System.out.println(RINNOVO_OK);
  	        	                 else
  	        	                  	    System.out.println(RINNOVO_NON_OK);
@@ -446,14 +587,20 @@ public class GestoreMenu implements Serializable
  	        	                 break;
  	        	                
  	        	        case 2: System.out.println(attualef.toString());
- 	        	        		    letteraMenu = 'd';
- 	        	                break;
- 	        	        
- 	        	        case 3: attualef.visualizzaPrestitiInCorso(ap)/////
- 	        	        			letteraMenu = 'd';
- 	        	        			break;
- 	        	        case 4: 
+ 	        	        		letteraMenu = 'd';
+ 	        	        		break;
+ 	        	                
+ 	        	        case 3: System.out.println(attualef.visualizzaPrestitiInCorso(ap));
+ 	        	        		break;
+ 	        	        		
+ 	        	        case 4: aggiungiPrestito(attualef, arc, ap);
+ 	        	        		break;
+ 	        	        		
+ 	        	        case 5: richiediProroga(attualef, arc, ap);
+ 	        	        		break;
+ 	        	        		
  	        	        case 6: letteraMenu = 'a';
+ 	        	        		attualef = null;
  	        	                break;
  	        	    }
  	        	    break;
@@ -490,11 +637,11 @@ public class GestoreMenu implements Serializable
  	        	     
  	        	     switch(scelta)
  	        	     {
- 	        	     	case 1: attualeop.visualizzaElencoFruitori(af);
+ 	        	     	case 1: System.out.println(attualeop.visualizzaElencoFruitori(af));
  	        	     			letteraMenu = 'f';
  	        	                break;
  	        	                
- 	        	     	case 2: attualeop.visualizzaArchivio(arc);
+ 	        	     	case 2: System.out.println(attualeop.visualizzaArchivio(arc));
  	        	     	        letteraMenu = 'f';
  	        	     	        break;
  	        	     	        
@@ -502,9 +649,12 @@ public class GestoreMenu implements Serializable
  	        	     	        letteraMenu = 'f';
  	        	     	        break;
  	        	     		
- 	        	     	case 4: 
- 	        	                
+ 	        	     	case 4: rimuoviRisorsa(attualeop, arc);
+ 	        	     	        letteraMenu = 'f';
+ 	        	     	        break;
+ 	        	     	    
  	        	        case 5: letteraMenu = 'a';
+ 	        	        		attualeop = null;
  	        	                break;
  	        	     }
  	        	     break;

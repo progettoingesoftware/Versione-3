@@ -1,4 +1,4 @@
-package it.ing.sw.v3;
+package it.ing.sw.v2;
 
 import java.io.Serializable;
 
@@ -35,7 +35,7 @@ public abstract class Risorsa implements Serializable
     	    return nome;
     }
     
-    public int getNumLicenze()
+    public int getNumLicenze() 
     {
     	   return numLicenze;
     }

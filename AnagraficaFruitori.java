@@ -1,4 +1,4 @@
-package it.ing.sw.v3;
+package it.ing.sw.v1;
 
 import java.io.Serializable;
 
@@ -18,6 +18,7 @@ public class AnagraficaFruitori extends Anagrafica implements Serializable
 	
 	public static final String INTESTAZIONE_ELENCO = "Elenco degli attuali fruitori: \n";
     public static final int DIECI_GIORNI = 10;
+    public static final String ANAGRAFICA_VUOTA = "Al momento non sono presenti fruitori.\n";
 	
     /**
      * Metodo costruttore della classe AnagraficaFruitori
@@ -152,14 +153,22 @@ public class AnagraficaFruitori extends Anagrafica implements Serializable
     public String toString()		
     {
    	    StringBuffer ris = new StringBuffer();
-   	    ris.append(INTESTAZIONE_ELENCO);
    	    
-   	    for(int i = 0; i < elenco.size(); i++)
+   	    if(elenco.size() == 0)
    	    {
-   	    	    Fruitore f = (Fruitore) elenco.get(i);
-   	    	    ris.append(i+1 + ")" + f.toString() + "\n");
+   	    	ris.append(ANAGRAFICA_VUOTA);
    	    }
-   	    
+   	    else
+   	    {
+   	   	    ris.append(INTESTAZIONE_ELENCO);
+
+   	   	    for(int i = 0; i < elenco.size(); i++)
+   	   	    {
+   	   	    	    Fruitore f = (Fruitore) elenco.get(i);
+   	   	    	    ris.append(i+1 + ")" + f.toString() + "\n");
+   	   	    }
+   	    }
+
    	    return ris.toString();
     }
         

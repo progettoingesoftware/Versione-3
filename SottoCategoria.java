@@ -1,4 +1,4 @@
-package it.ing.sw.v3;
+package it.ing.sw.v2;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -15,7 +15,9 @@ public class SottoCategoria extends Categoria implements Serializable
 
 	private String nomeSottoC;
     
-    public static final String DESCRIZIONE_SOTTOCATEGORIA = "\nNome sottocategoria: %s\nRisorse in essa contenute:\n";
+	public static final String DESCRIZIONE_SOTTOCATEGORIA = "Nome sottocategoria: %s\n\t";
+	public static final String ELENCO_RISORSE_VUOTO = "Al momento non sono presenti risorse\n";
+	public static final String INTESTAZIONE_RISORSE = "Risorse in essa contenute:\n";
     
     /**
      * Metodo costruttore della classe SottoCategoria. A differenza della superclasse, l'attributo elencoRisorse, che 
@@ -52,10 +54,18 @@ public class SottoCategoria extends Categoria implements Serializable
  	   StringBuffer ris = new StringBuffer();
  	   ris.append(String.format(DESCRIZIONE_SOTTOCATEGORIA, nomeSottoC));
  	   
- 	   for(int i = 0; i < elencoRisorse.size(); i++)
+ 	   if(elencoRisorse.size() == 0)
+ 		   	ris.append(ELENCO_RISORSE_VUOTO);
+ 	   else
  	   {
- 		   Risorsa r = elencoRisorse.get(i);
- 		   ris.append(i+1 + ")"+ r.toString());
+		   	ris.append(INTESTAZIONE_RISORSE);
+
+ 	 	   for(int i = 0; i < elencoRisorse.size(); i++)
+ 	 	   {
+ 	 		   Risorsa r = elencoRisorse.get(i);
+ 	 		   ris.append("\t\t" + (i+1) + ")"+ r.toString());
+ 	 	   }
+ 	 	   
  	   }
  	   
  	   return ris.toString();
