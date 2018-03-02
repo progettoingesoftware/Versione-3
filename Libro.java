@@ -58,6 +58,30 @@ public class Libro extends Risorsa implements Serializable
     	    return titolo;
     }
     
+    public String getAutore()
+    {
+        	StringBuffer aut = new StringBuffer();
+        
+        	for(int i = 0; i < autore_i.size(); i++)
+        	{
+     	       	aut.append(autore_i.get(i));
+     	       	if(i < autore_i.size()-1)
+     	       		aut.append("-");
+        	}
+        	
+        	return aut.toString();
+    }
+    
+    public int getAnnoPub()
+    {
+    	    return annoPub;
+    }
+    
+    public String getCasaEditrice()
+    {
+    	    return casaEditrice;
+    }
+    
     public String getGenere()
     {
     	    return genere;
@@ -73,16 +97,9 @@ public class Libro extends Risorsa implements Serializable
     public String toString()
     {
        StringBuffer ris = new StringBuffer();
-       StringBuffer aut = new StringBuffer();
+       String aut = getAutore();
        
-       for(int i = 0; i < autore_i.size(); i++)
-       {
-    	       aut.append(autore_i.get(i));
-    	       if(i < autore_i.size()-1)
-    	    	        aut.append("-");
-       }
-       
-       ris.append(String.format(DESCRIZIONE_LIBRO, titolo, aut.toString(), getNumLicenze(), numPagine, annoPub, casaEditrice, lingua, genere));
+       ris.append(String.format(DESCRIZIONE_LIBRO, titolo, aut, getNumLicenze(), numPagine, annoPub, casaEditrice, lingua, genere));
        return ris.toString();
     }
     

@@ -1,6 +1,10 @@
 package it.ing.sw.v1;
 
 import java.io.Serializable;
+import java.util.Vector;
+
+import it.ing.sw.v2.Risorsa;
+import it.ing.sw.v3.ArchivioPrestiti;
 
 /**
  * Questa classe rappresenta il modello di un Utente
@@ -53,6 +57,26 @@ public class Utente implements Serializable
     public String getPassword()
     {
    	     return password;
+    }
+    
+    public Vector<Risorsa> ricercaRisorsaPerTitolo(ArchivioPrestiti ap, String titolo)
+    {
+    	return ap.ricercaRisorsaPerTitolo(titolo);
+    }
+    
+    public Vector<Risorsa> ricercaRisorsaPerAutore(ArchivioPrestiti ap, String autore)
+    {
+    	return ap.ricercaRisorsaPerAutore(autore);
+    }
+    
+    public Vector<Risorsa> ricercaRisorsaPerAnnoPubblicazione(ArchivioPrestiti ap, int anno)
+    {
+    	return ap.ricercaRisorsaPerAnnoPubblicazione(anno);
+    }
+    
+    public Vector<Risorsa> ricercaRisorsaPerCasaEditrice(ArchivioPrestiti ap, String casa)
+    {
+    	return ap.ricercaRisorsaPerCasaEditrice(casa);
     }
     
 }

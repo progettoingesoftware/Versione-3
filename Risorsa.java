@@ -12,7 +12,7 @@ public abstract class Risorsa implements Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String nome;
+	protected String titolo;
 	private int numLicenze;
     
 	/**
@@ -20,9 +20,9 @@ public abstract class Risorsa implements Serializable
 	 * @param n: il nome con cui identificare la risorsa
 	 * @param l: il numero delle licenze associate alla risorsa
 	 */
-    public Risorsa(String n, int l)
+    public Risorsa(String t, int l)
     {
-    	    this.nome = n;
+    	    this.titolo = t;
     	    this.numLicenze = l;
     }
     
@@ -30,10 +30,13 @@ public abstract class Risorsa implements Serializable
      * Metodi get per il ritorno dei vari attributi della classe Risorsa
      * @return
      */
-    public String getNome()
-    {
-    	    return nome;
-    }
+    public abstract String getTitolo();
+    
+    public abstract String getAutore();
+    
+    public abstract int getAnnoPub();
+    
+    public abstract String getCasaEditrice();
     
     public int getNumLicenze() 
     {

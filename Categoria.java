@@ -119,7 +119,7 @@ public class Categoria implements Serializable
 	   for(int i = 0; i < elencoRisorse.size(); i++)
 	   {
 		   Risorsa r = elencoRisorse.get(i);
-		   if(r.getNome().equalsIgnoreCase(n))
+		   if(r.getTitolo().equalsIgnoreCase(n))
 			   return r;
 	   }
 	   
@@ -179,7 +179,7 @@ public class Categoria implements Serializable
  	   for(int i = 0; i < elencoRisorse.size(); i++)
  	   {
  		   Risorsa r = elencoRisorse.get(i);
- 		   ris.append(i+1 + ")"+ r.getNome() + "\n");
+ 		   ris.append(i+1 + ")"+ r.getTitolo() + "\n");
  	   }
  	   
  	   return ris.toString();
