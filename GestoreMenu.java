@@ -1,23 +1,23 @@
-package it.ing.sw.v3;
+package it.ing.sw.v3.p3;
 
 import java.io.Serializable;
 import java.time.DateTimeException;
 import java.util.Vector;
 
 import it.ing.sw.*;
-import it.ing.sw.v1.Anagrafica;
-import it.ing.sw.v1.AnagraficaFruitori;
-import it.ing.sw.v1.AnagraficaOperatori;
-import it.ing.sw.v1.Fruitore;
-import it.ing.sw.v1.Menu;
-import it.ing.sw.v1.Operatore;
-import it.ing.sw.v1.Utente;
-import it.ing.sw.v2.Archivio;
-import it.ing.sw.v2.Categoria;
-import it.ing.sw.v2.InserimentoRisorsa;
-import it.ing.sw.v2.Libro;
-import it.ing.sw.v2.Risorsa;
-import it.ing.sw.v2.SottoCategoria;
+import it.ing.sw.v3.p1.Anagrafica;
+import it.ing.sw.v3.p1.AnagraficaFruitori;
+import it.ing.sw.v3.p1.AnagraficaOperatori;
+import it.ing.sw.v3.p1.Fruitore;
+import it.ing.sw.v3.p1.Menu;
+import it.ing.sw.v3.p1.Operatore;
+import it.ing.sw.v3.p1.Utente;
+import it.ing.sw.v3.p2.Archivio;
+import it.ing.sw.v3.p2.Categoria;
+import it.ing.sw.v3.p2.InserimentoRisorsa;
+import it.ing.sw.v3.p2.Libro;
+import it.ing.sw.v3.p2.Risorsa;
+import it.ing.sw.v3.p2.SottoCategoria;
 
 import java.time.*;
 
@@ -29,9 +29,6 @@ import java.time.*;
  */
 public class GestoreMenu implements Serializable
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	public static final String SALUTO_INIZIALE = "Benvenuto nell'applicazione per la gestione di risorse multimediali\n";
@@ -43,7 +40,7 @@ public class GestoreMenu implements Serializable
 	public static final String INTESTAZIONE_C = "ACCESSO FRUITORE";
 	public static final String [] OPZIONI_C = {"Inserisci username e password", "Indietro"};
 	public static final String INTESTAZIONE_D= "COSA DESIDERI FARE?";
-	public static final String [] OPZIONI_D = {"Rinnova iscrizione", "Visualizza profilo", "Logout"};
+	public static final String [] OPZIONI_D = {"Rinnova iscrizione", "Visualizza profilo", "Visualizza prestiti in corso", "Richiedi un nuovo prestito", "Richiedi proroga per un prestito", "Ricerca risorsa", "Valuta disponibilita'", "Logout"};
 	public static final String INTESTAZIONE_E = "ACCESSO OPERATORE";
 	public static final String [] OPZIONI_E = {"Inserisci username e password", "Indietro"};
 	public static final String INTESTAZIONE_F = "COSA DESIDERI FARE?";
@@ -74,27 +71,35 @@ public class GestoreMenu implements Serializable
 	public static final String RICHIESTA_PROSECUZIONE = "Si desidera riprovare? (S/N)\n";
 	public static final String ERRORE = "Si e' verificato un errore\n";
 
-	public static final String CONTENUTO_ARC = "L'archivio contiene le seguenti categorie:\n%s";
-	public static final String CONTENUTO_CAT = "La categoria %s contiene queste risorse:\n%s";
-	public static final String CONTENUTO_SOTTO = "La sottocategoria %s contiene queste risorse:\n%s"; 
+	public static final String CONTENUTO_ARC = "L'archivio contiene le seguenti categorie:\n%s\n";
+	public static final String CONTENUTO_CAT_RISORSA = "La categoria %s contiene queste risorse:\n%s\n";
+	public static final String CAT_SENZA_SOTTO = "La categoria %s non presenta sottocategorie in quanto contiene direttamente le risorse\n";
+	public static final String CONTENUTO_ELENCO_RISORSE_CAT_VUOTO = "La categoria %s non contiene delle risorse quindi non è possibile effettuare operazioni\n";	
+	public static final String CONTENUTO_ELENCO_RISORSE_SOTTO_VUOTO = "La sottocategoria %s non contiene delle risorse quindi non è possibile effettuare operazioni\n";	
+	public static final String CONTENUTO_CAT_SOTTO = "La categoria %s contiene queste sottocategorie:\n%s\n";
+	public static final String CONTENUTO_SOTTO = "La sottocategoria %s contiene queste risorse:\n%s\n"; 
 	
 	public static final String OP_SUCCESSO = "L'operazione e' avvenuta con successo\n";
-    public static final String OP_NO_SUCCESSO_AGGIUNTA = "Attenzione! La risorsa e' gia'� presente nell'archivio oppure la risorsa non e' compatibile con la sottocategoria dove si vuole inserirla\n";
+    public static final String OP_NO_SUCCESSO_AGGIUNTA = "Attenzione! La risorsa e' gia'�presente nell'archivio oppure la risorsa non e' compatibile con la sottocategoria dove si vuole inserire\n";
     public static final String OP_NO_SUCCESSO_PRESTITO = "Attenzione! La risorsa indicata non e' presente in archivio e/o non e' disponibile\n";
-    public static final String OP_NO_SUCCESSO_PROROGA = "Attenzione! Non e' stato possibile effettuare la proroga richiesta\n";
+	public static final String OP_NO_SUCCESSO_PROROGA_1 = "Attenzione! Non e' stato possibile effettuare la proroga richiesta\n";
+	public static final String OP_NO_SUCCESSO_PROROGA_2 = "Al momento non ci sono prestiti in corso quindi non è possibile effettuare una proroga\n";
+ 
+    public static final String INS_NUMERO_CAT_AGGIUNTA_RISORSA = "Inserisci il numero della categoria a cui aggiungere la risorsa:\n";
+    public static final String INS_NUMERO_CAT_RIMOZIONE_RISORSA = "Inserisci il numero della categoria a cui rimuovere la risorsa:\n";
+ 
+    public static final String INS_NUMERO_SOTTO_AGGIUNTA_RISORSA =  "Inserisci il numero della sottocategoria a cui aggiungere la risorsa:\n";
+    public static final String INS_NUMERO_SOTTO_RIMOZIONE_RISORSA =  "Inserisci il numero della sottocategoria a cui rimuovere la risorsa:\n";
 
-    public static final String INS_NUMERO_CAT = "Inserisci il numero della categoria a cui aggiungere/rimuovere la risorsa:";
-    public static final String INS_IN_SOTTO = "La categoria %s contiene queste sottocategorie:\n%s";
-    public static final String INS_PROCEDERE_SOTTO = "Vuoi proseguire nell'inserimento/rimozione della risorsa in/da una sottocategoria? (S/N)\n";
-    public static final String INS_NUMERO_SOTTOC =  "Inserisci il numero della sottocategoria a cui aggiungere/rimuovere la risorsa:";
-    public static final String INS_NUMERO_RISORSA = "Inserisci il numero della risorsa da rimuovere:";    
-    public static final String INS_PROCEDERE_RISORSA = "Vuoi proseguire nella rimozione della risorsa? (S/N)\n";
+    public static final String INS_NUMERO_RISORSA_RIMOZIONE = "Inserisci il numero della risorsa da rimuovere:\n";
+    
+    public static final String INS_PROCEDERE_CAT = "Vuoi proseguire nella scelta della categoria (S/N)?\n";
+    public static final String INS_PROCEDERE_SOTTO = "Vuoi proseguire nella scelta della sottocategoria (S/N)?\n";
+    public static final String INS_PROCEDERE_RISORSA = "Vuoi proseguire nella scelta della risorsa? (S/N)\n";
         
-    public static final String INS_NUMERO_CAT_PRESTITO = "Inserisci il numero della categoria di cui vuoi richiedere un prestito:";
-    public static final String INS_NUMERO_SOTTOC_PRESTITO =  "Inserisci il numero della sottocategoria in cui cercare la risorsa:";
-    public static final String INS_NUMERO_RISORSA_PRESTITO = "Inserisci il numero della risorsa da richiedere in prestito:";      
-    public static final String INS_PROCEDERE_PRESTITO_SCELTA_SOTTO = "Vuoi proseguire nella scelta della sottocategoria? (S/N)\n";
-    public static final String INS_PROCEDERE_PRESTITO_SCELTA_RISORSA = "Vuoi proseguire nella scelta della risorsa? (S/N)\n";
+    public static final String INS_NUMERO_CAT_PRESTITO = "Inserisci il numero della categoria di cui vuoi richiedere un prestito:\n";
+    public static final String INS_NUMERO_SOTTO_PRESTITO =  "Inserisci il numero della sottocategoria in cui cercare la risorsa:\n";
+    public static final String INS_NUMERO_RISORSA_PRESTITO = "Inserisci il numero della risorsa da richiedere in prestito:\n";      
 
     public static final String INS_NUMERO_PRESTITO_PROROGA = "Inserisci il numero del prestito di cui vuoi richiedere la proroga:";      
     
@@ -103,16 +108,18 @@ public class GestoreMenu implements Serializable
     public static final String INS_ANNOPUB_RISORSA = "Inserisci l'anno di pubblicazione: ";      
     public static final String INS_CASAED_RISORSA = "Inserisci la casa editrice: "; 
     
-	public static final String AVVIO_RICERCA_RISORSE= "Come intendi ricercare la risorsa?\n1-Per titolo\n2-Per autore\n3-Per anno di pubblicazione\n4-Per casa editrice\nDigitare un numero";
+    public static final String INS_NUMERO_CAT_RICERCA = "Inserisci il numero della categoria in cui vuoi cercare la risorsa:\n";
+	public static final String AVVIO_RICERCA_RISORSE = "Come intendi ricercare la risorsa?\n1-Per titolo\n2-Per autore\n3-Per anno di pubblicazione\n4-Per casa editrice\n\nDigitare un numero:\n";
 	public static final String INTESTAZIONE_RICERCA_RISORSE = "Elenco delle risorse trovate: \n";
-	public static final String RICHIESTA_DIGITAZIONE_VALUTAZIONE = "Digitare il numero della risorsa scelta: ";
+	public static final String RICHIESTA_DIGITAZIONE_VALUTAZIONE = "Digitare il numero della risorsa scelta:\n";
 	public static final String RISORSA_DISPONIBILE = "La risorsa indicata e' disponibile\n";
 	public static final String RISORSA_NON_DISPONIBILE = "La risorsa indicata non e' disponibile\n";
 
 	public static final int NUM_MINIMO = 1;
+	public static final int NULLO = 0;
 
     /**
-	 * Metodo per l'aggiunta di un nuovo fruitore all'elenco dei fruitori gia' presenti all'interno di af.
+	 * Metodo di interazione con l'utente per l'aggiunta di un nuovo fruitore all'elenco dei fruitori gia' presenti all'interno di af.
 	 * Vengono effettuati dei controlli sulla correttezza della data di nascita inserita e sulla possibile presenza di fruitori gia' iscritti in possesso delle medesime credenziali indicate
 	 * 
 	 * Pre : af != null
@@ -262,7 +269,7 @@ public class GestoreMenu implements Serializable
 	}
 	
 	/**
-	 * Metodo per l'accesso di un utente al sistema.
+	 * Metodo di interazione con l'utente per l'accesso al sistema.
 	 * Vengono effettuati dei controlli sulla correttezza dello username e della password indicati
 	 * 
 	 * Pre : ag != null
@@ -323,46 +330,58 @@ public class GestoreMenu implements Serializable
     	Libro nuovol = null;
     	     
     	System.out.printf(CONTENUTO_ARC, arc.stampaElencoCategorie());
-    	int num1 = InputDati.leggiIntero(INS_NUMERO_CAT, NUM_MINIMO, (arc.getElencoCategorie()).size());
-    	c = (arc.getElencoCategorie()).get(num1-1);
-    	    	
-    	System.out.printf(INS_IN_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
-
-    	if(c.getElencoSottoCategorie() == null)
+    	
+      	if(arc.getElencoCategorie().size() != NULLO  && InputDati.leggiUpperChar(INS_PROCEDERE_CAT, "SN") == 'S')
     	{
-      	    if((c.getNome()).equalsIgnoreCase("Libri"))  
-    	    {
-    	    	nuovol = InserimentoRisorsa.inserisciLibro();
-    	    	    	    	    	       
-  	    	   	if((c.getRisorsa(nuovol.getTitolo()) == null))
-  	    	   	{
-  	    	   		op.aggiungiRisorsaCategoria(nuovol, c);
-  	    	    	System.out.println(OP_SUCCESSO);
-  	    	   	}
-  	    	   	else
-  	    	    	System.out.println(OP_NO_SUCCESSO_AGGIUNTA);
-    	    }
-      	    
+        	int num1 = InputDati.leggiIntero(INS_NUMERO_CAT_AGGIUNTA_RISORSA, NUM_MINIMO, (arc.getElencoCategorie()).size());
+        	c = (arc.getElencoCategorie()).get(num1-1);
+        
+          	if(c.getElencoSottoCategorie().size() == NULLO)
+        	{
+          		System.out.printf(CAT_SENZA_SOTTO, c.getNome());
+          	    
+          		if((c.getNome()).equalsIgnoreCase("Libri"))  
+          		{
+          			nuovol = InserimentoRisorsa.inserisciLibro();
+        	    	    	    	    	       
+          			if(c.getRisorsa(nuovol.getNome()) == null )
+          			{
+          				op.aggiungiRisorsaCategoria(nuovol, c);
+          				System.out.println(OP_SUCCESSO);
+          			}
+          			else
+          				System.out.println(OP_NO_SUCCESSO_AGGIUNTA);
+          		}
+          			
+           	}
+        	else
+        	{
+            	System.out.printf(CONTENUTO_CAT_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
+            	
+            	if(InputDati.leggiUpperChar(INS_PROCEDERE_SOTTO, "SN") == 'S')
+            	{	 
+            		int num2 = InputDati.leggiIntero(INS_NUMERO_SOTTO_AGGIUNTA_RISORSA, NUM_MINIMO, (c.getElencoSottoCategorie()).size());
+            		sc = (c.getElencoSottoCategorie()).get(num2-1);
+        	    	    	    	    	    
+            		if((c.getNome()).equalsIgnoreCase("Libri"))  
+            		{
+            			nuovol = InserimentoRisorsa.inserisciLibro();
+        	    	    	    	    	       
+      	    	   		if( (sc.getRisorsa(nuovol.getTitolo()) == null) && (nuovol.getGenere()).equalsIgnoreCase(sc.getNome()) )
+      	    	   		{
+      	    	   			op.aggiungiRisorsaCategoria(nuovol, sc);
+      	    	   			System.out.println(OP_SUCCESSO);
+      	    	   		}
+      	    	   		else
+      	    	   			System.out.println(OP_NO_SUCCESSO_AGGIUNTA);
+            		}
+            	
+            	}
+        	    
+        	}
+          	
     	}
-    	else if(InputDati.leggiUpperChar(INS_PROCEDERE_SOTTO, "SN") == 'S')
-    	{
-    	    int num2 = InputDati.leggiIntero(INS_NUMERO_SOTTOC, NUM_MINIMO, (c.getElencoSottoCategorie()).size());
-    	    sc = (c.getElencoSottoCategorie()).get(num2-1);
-    	    	    	    	    	    
-    	    if((c.getNome()).equalsIgnoreCase("Libri"))  
-    	    {
-    	    	nuovol = InserimentoRisorsa.inserisciLibro();
-    	    	    	    	    	       
-  	    	   	if((sc.getRisorsa(nuovol.getTitolo()) == null) && ((nuovol.getGenere()).equalsIgnoreCase(sc.getNome())))
-  	    	   	{
-  	    	   		op.aggiungiRisorsaCategoria(nuovol, sc);
-  	    	    	System.out.println(OP_SUCCESSO);
-  	    	   	}
-  	    	   	else
-  	    	    	System.out.println(OP_NO_SUCCESSO_AGGIUNTA);
-    	    }
-    	    
-    	}
+    	
     	
     }
     
@@ -374,143 +393,214 @@ public class GestoreMenu implements Serializable
      * @param op: l'operatore che effettua la rimozione della risorsa
      * @param arc: l'archivio da cui rimuovere la risorsa
      */
-    public void rimuoviRisorsa(Operatore op, Archivio arc)     ////////Da ampliare con il metodo generico di ricerca della risorsa
+    public void rimuoviRisorsa(Operatore op, Archivio arc)
     {
        	Categoria c = null;
 	    SottoCategoria sc = null;
 	    Risorsa daEliminare = null;
 	    
 	    System.out.printf(CONTENUTO_ARC, arc.stampaElencoCategorie());
-	    int num1 = InputDati.leggiIntero(INS_NUMERO_CAT, NUM_MINIMO, (arc.getElencoCategorie()).size());
-   	    c = (arc.getElencoCategorie()).get(num1-1);
-   	       	 
-    	System.out.printf(INS_IN_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
-
-  	    if(c.getElencoSottoCategorie() == null)
-	    {
-	    	   System.out.printf(CONTENUTO_CAT, c.getNome(), c.stampaElencoRisorse());
-	    	  
-	    	   int num3 = InputDati.leggiIntero(INS_NUMERO_RISORSA, NUM_MINIMO, (c.getElencoRisorse()).size());
-	    	   daEliminare = (c.getElencoRisorse()).get(num3-1);
-	    	   op.rimuoviRisorsaCategoria(daEliminare, c);
-	    } 
-  	    else if(InputDati.leggiUpperChar(INS_PROCEDERE_SOTTO, "SN") == 'S')
-	    {
-	    	   int num2 = InputDati.leggiIntero(INS_NUMERO_SOTTOC, NUM_MINIMO, (c.getElencoSottoCategorie()).size());
-	    	   sc = (c.getElencoSottoCategorie()).get(num2-1);
-
-	    	   System.out.printf(CONTENUTO_SOTTO, sc.getNome(), sc.stampaElencoRisorse());
-	    	   
-	    	   if(InputDati.leggiUpperChar(INS_PROCEDERE_RISORSA, "SN") == 'S')
-	    	   {
-	    		   int num3 = InputDati.leggiIntero(INS_NUMERO_RISORSA, NUM_MINIMO, (sc.getElencoRisorse()).size());
-	    		   daEliminare = (sc.getElencoRisorse()).get(num3-1);
-	    		   op.rimuoviRisorsaCategoria(daEliminare, sc);
-	    	   }
-	    }   
-   	    
-    }
-    
-    public void aggiungiPrestito(Fruitore f, Archivio arc, ArchivioPrestiti a)    ///////
-    {
-    	Categoria c = null;
-    	SottoCategoria sc = null;
-    	Risorsa r = null;
-    	Prestito nuovo = null;
-    	
-    	System.out.printf(CONTENUTO_ARC, arc.stampaElencoCategorie());
-    	int num1 = InputDati.leggiIntero(INS_NUMERO_CAT_PRESTITO, NUM_MINIMO, (arc.getElencoCategorie()).size());
-    	c = (arc.getElencoCategorie()).get(num1-1);
-
-    	System.out.printf(INS_IN_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
-
-    	if(c.getElencoSottoCategorie() == null)
+	    
+	  	if(arc.getElencoCategorie().size() != NULLO && InputDati.leggiUpperChar(INS_PROCEDERE_CAT, "SN") == 'S')
     	{
-      	    if((c.getNome()).equalsIgnoreCase("Libri"))  
+        	int num1 = InputDati.leggiIntero(INS_NUMERO_CAT_RIMOZIONE_RISORSA, NUM_MINIMO, (arc.getElencoCategorie()).size());
+        	c = (arc.getElencoCategorie()).get(num1-1);
+    	
+        	if(c.getElencoSottoCategorie().size() == NULLO)
     	    {
-      	    	System.out.printf(c.stampaElencoRisorse());
-      	    	
-    	    	int num = InputDati.leggiIntero(INS_NUMERO_RISORSA_PRESTITO, NUM_MINIMO, c.getElencoRisorse().size());
-    	    	
-    	    	r = c.getElencoRisorse().get(num-1);
-    	    	
-  	    	   	if(r != null && a.controlloDisponibilitaRisorsa(r) && a.controlloPrestito(c, f))
-  	    	   	{
-  	    	   		nuovo = new Prestito(c, f, r);
-  	    	   		f.registraNuovoPrestito(a, nuovo);
-  	    	    	System.out.println(OP_SUCCESSO);
-  	    	   	}
-  	    	   	else
-  	    	    	System.out.println(OP_NO_SUCCESSO_PRESTITO);
-    	    }
-      	    
-    	}
-    	else if(InputDati.leggiUpperChar(INS_PROCEDERE_SOTTO, "SN") == 'S')
-    	{
-    	    int num2 = InputDati.leggiIntero(INS_NUMERO_SOTTOC_PRESTITO, NUM_MINIMO, (c.getElencoSottoCategorie()).size());
-    	    sc = (c.getElencoSottoCategorie()).get(num2-1);
-    	    	    	    	    	    
-  	    	System.out.println(sc.stampaElencoRisorse());
-  	    	
-	    	int num = InputDati.leggiIntero(INS_NUMERO_RISORSA_PRESTITO, NUM_MINIMO, c.getElencoRisorse().size());
-	    	
-	    	r = sc.getElencoRisorse().get(num-1);
+    	    	   System.out.printf(CONTENUTO_CAT_RISORSA, c.getNome(), c.stampaElencoRisorse());
+    	    	   
+    	    	   if(c.getElencoRisorse().size() != NULLO && InputDati.leggiUpperChar(INS_PROCEDERE_RISORSA, "SN") == 'S')
+    	    	   {
+    		    	   int num3 = InputDati.leggiIntero(INS_NUMERO_RISORSA_RIMOZIONE, NUM_MINIMO, (c.getElencoRisorse()).size());
+    		    	   daEliminare = (c.getElencoRisorse()).get(num3-1);
+    		    	   op.rimuoviRisorsaCategoria(daEliminare, c);
+    	    	   }
 
-	    	   	if(r != null && a.controlloDisponibilitaRisorsa(r) && a.controlloPrestito(c, f))
-	    	   	{
-  	    	   		nuovo = new Prestito(c, f, r);
-  	    	   		f.registraNuovoPrestito(a, nuovo);
-	    	    	System.out.println(OP_SUCCESSO);
-	    	   	}
-	    	   	else
-	    	    	System.out.println(OP_NO_SUCCESSO_PRESTITO);
-    	    
+    	    } 
+      	    else
+    	    {
+      	       	System.out.printf(CONTENUTO_CAT_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
+      	       		
+      	       	 if(InputDati.leggiUpperChar(INS_PROCEDERE_SOTTO, "SN") == 'S')
+      	       	 {
+    	    	   int num2 = InputDati.leggiIntero(INS_NUMERO_SOTTO_RIMOZIONE_RISORSA, NUM_MINIMO, (c.getElencoSottoCategorie()).size());
+    	    	   sc = (c.getElencoSottoCategorie()).get(num2-1);
+
+    	    	   System.out.printf(CONTENUTO_SOTTO, sc.getNome(), sc.stampaElencoRisorse());
+    	    	   
+    	    	   if(sc.getElencoRisorse().size() != NULLO && InputDati.leggiUpperChar(INS_PROCEDERE_RISORSA, "SN") == 'S')
+    	    	   {
+    	    		   int num3 = InputDati.leggiIntero(INS_NUMERO_RISORSA_RIMOZIONE, NUM_MINIMO, (sc.getElencoRisorse()).size());
+    	    		   daEliminare = (sc.getElencoRisorse()).get(num3-1);
+    	    		   op.rimuoviRisorsaCategoria(daEliminare, sc);
+    	    	   }
+    	    	 
+      	       	 }
+    	    	   
+    	    }   
+  	    
     	}
     	
     }
     
-    public void richiediProroga(Fruitore f, Archivio arc, ArchivioPrestiti a)    ///////
+    /**
+     * Metodo di interazione con l'utente, al quale permette di registrare un prestito se sono rispettate
+     * delle condizioni. Se la registrazione del prestito avviene con successo, il prestito viene aggiunto all'archivio
+     * dei prestiti
+     * 
+     * Pre: (f != null) && (arc != null) && (a != null)
+     * 
+     * @param f: il fruitore che vuole effettuare la registrazione del prestito
+     * @param arc: l'archivio delle risorse
+     * @param a: l'archivio dei prestiti
+     */
+    public void registraPrestito(Fruitore f, Archivio arc, ArchivioPrestiti ap) 
     {
-    	System.out.println(f.visualizzaPrestitiInCorso(a));
+    	 Categoria c = null;
+    	 SottoCategoria sc = null;
+    	 Risorsa r = null;
+    	 Prestito nuovo = null;
     	
-    	int num = InputDati.leggiIntero(INS_NUMERO_PRESTITO_PROROGA, NUM_MINIMO, a.getVettorePrestiti(f.getUsername()).size());
-    	Prestito nuovo = a.getElencoPrestiti().get(num-1);
+    	 System.out.printf(CONTENUTO_ARC, arc.stampaElencoCategorie());
     	
-    	if(f.registraProrogaPrestito(a, nuovo))
-    	{
-        	System.out.println(OP_SUCCESSO);
+      	if(arc.getElencoCategorie().size() != NULLO  && InputDati.leggiUpperChar(INS_PROCEDERE_CAT, "SN") == 'S')
+      	{
+      		int num1 = InputDati.leggiIntero(INS_NUMERO_CAT_PRESTITO, NUM_MINIMO, (arc.getElencoCategorie()).size());
+      		c = (arc.getElencoCategorie()).get(num1-1);
+        
+          	if(c.getElencoSottoCategorie().size() == NULLO)
+        	{
+          		System.out.printf(CAT_SENZA_SOTTO, c.getNome());
+          		
+          		if(c.getElencoRisorse().size() != 0) 
+          		{
+          			System.out.printf(CONTENUTO_CAT_RISORSA, c.getNome(), c.stampaElencoRisorse());
+          			int num = InputDati.leggiIntero(INS_NUMERO_RISORSA_PRESTITO, NUM_MINIMO, c.getElencoRisorse().size());
+          			r = c.getElencoRisorse().get(num-1);
+          	    
+          			if(ap.controlloDisponibilitaRisorsa(r) && ap.controlloPerUlteriorePrestito(c, f))
+          			{
+          				nuovo = new Prestito(c, f, r);
+          				f.registraNuovoPrestito(ap, nuovo);
+          				System.out.println(OP_SUCCESSO);
+          			}
+          			else
+          				System.out.println(OP_NO_SUCCESSO_PRESTITO);
+          		}
+          		else
+      	    	    System.out.printf(CONTENUTO_ELENCO_RISORSE_CAT_VUOTO, c.getNome());
+          	    
+        	}
+        	else
+        	{
+            	System.out.printf(CONTENUTO_CAT_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
+            	
+            	if(InputDati.leggiUpperChar(INS_PROCEDERE_SOTTO, "SN") == 'S')
+            	{	 
+            		int num2 = InputDati.leggiIntero(INS_NUMERO_SOTTO_PRESTITO, NUM_MINIMO, (c.getElencoSottoCategorie()).size());
+            		sc = (c.getElencoSottoCategorie()).get(num2-1);
+        	    	    	    	    	    
+            	    if((sc.getElencoRisorse()).size() != 0)
+            	    {
+         	           System.out.printf(CONTENUTO_SOTTO, sc.getNome(), sc.stampaElencoRisorse());
+        	           int num = InputDati.leggiIntero(INS_NUMERO_RISORSA_PRESTITO, NUM_MINIMO, c.getElencoRisorse().size());
+        	       	   r = sc.getElencoRisorse().get(num-1);
+        	       	   
+        	       	   if(ap.controlloDisponibilitaRisorsa(r) && ap.controlloPerUlteriorePrestito(c, f))
+        	       	   {
+    	    	   		  nuovo = new Prestito(c, f, r);
+    	    	   		  f.registraNuovoPrestito(ap, nuovo);
+    	    	   		  System.out.println(OP_SUCCESSO);
+        	       	   }
+        	       	   else
+        	       		   System.out.println(OP_NO_SUCCESSO_PRESTITO);
+            	    
+            	    }
+            	    else
+            		    System.out.println(CONTENUTO_ELENCO_RISORSE_SOTTO_VUOTO);	     
+            	
+            	}
+        	    
+        	}
+          	
     	}
-    	else
-    	{
-        	System.out.println(OP_NO_SUCCESSO_PROROGA);
-    	}
+     
+    }
     	
+    /**
+     * Metodo di interazione con l'utente per la richiesta della proroga di una risorsa
+     * 
+     * Pre: (f != null) && (arc != null) && (ap != null)
+     * 
+     * @param f: il fruitore che richiede la proroga
+     * @param arc: l'archivio delle risorse
+     * @param ap: l'archivio dei prestiti
+     */
+    public void richiediProroga(Fruitore f, ArchivioPrestiti ap)  
+    { 
+   	    if(ap.getPrestiti(f.getUsername()).size() != 0)
+   	    {
+   	       System.out.println(f.visualizzaPrestitiInCorso(ap));
+   	
+          int num = InputDati.leggiIntero(INS_NUMERO_PRESTITO_PROROGA, NUM_MINIMO, ap.getPrestiti(f.getUsername()).size());
+          Prestito pr = ap.getElencoPrestiti().get(num-1);
+   	
+          if(f.registraProrogaPrestito(pr))
+   	       {
+              System.out.println(OP_SUCCESSO);
+   	       }
+          else
+          {
+              System.out.println(OP_NO_SUCCESSO_PROROGA_1);
+          }
+   	    }
+   	    else
+   		    System.out.println(OP_NO_SUCCESSO_PROROGA_2);
+    }
+   
+    public Vector<Risorsa> ricercaRisorsa(Utente ut, Archivio arc, ArchivioPrestiti a)
+    {
+       	Categoria c = null;
+       	
+   	 	System.out.printf(CONTENUTO_ARC, arc.stampaElencoCategorie());
+   	 	
+   	 	if(arc.getElencoCategorie().size() != NULLO  && InputDati.leggiUpperChar(INS_PROCEDERE_CAT, "SN") == 'S')
+   	 	{
+   	 		int num1 = InputDati.leggiIntero(INS_NUMERO_CAT_RICERCA, NUM_MINIMO, (arc.getElencoCategorie()).size());
+   	 		c = (arc.getElencoCategorie()).get(num1-1);
+   	 		
+   	 		if(c.getNome().equalsIgnoreCase("Libri"))
+					return ricercaRisorsaLibri(ut, a);
+   	 	}
+   	 	
+   	 	return null;
+   	 	
     }
     
-    public Vector<Risorsa> ricercaRisorsa(Utente ut, ArchivioPrestiti a)
-    {
-    	 int numScelta = InputDati.leggiIntero(AVVIO_RICERCA_RISORSE, 1, 4);
-    	
-	     switch(numScelta)
+   public Vector<Risorsa> ricercaRisorsaLibri(Utente ut, ArchivioPrestiti a)
+   {
+   	    int numScelta = InputDati.leggiIntero(AVVIO_RICERCA_RISORSE, 1, 4);
+   	
+	    switch(numScelta)
 	    {
-	    	case(1): return( ut.ricercaRisorsaPerTitolo( a, InputDati.leggiStringa(INS_TITOLO_RISORSA) ) );
+	    	   case(1): return(ut.ricercaRisorsaPerTitolo(a, InputDati.leggiStringa(INS_TITOLO_RISORSA)));
 	    		
-	    	case(2): return( ut.ricercaRisorsaPerAutore( a, InputDati.leggiStringa(INS_AUTORE_RISORSA) ) );
+	       case(2): return(ut.ricercaRisorsaPerAutore(a, InputDati.leggiStringa(INS_AUTORE_RISORSA)));
+	       
+	       case(3): return(ut.ricercaRisorsaPerAnnoPubblicazione(a, InputDati.leggiIntero(INS_ANNOPUB_RISORSA)));
 	    		
-	    	case(3): return( ut.ricercaRisorsaPerAnnoPubblicazione( a, InputDati.leggiIntero(INS_ANNOPUB_RISORSA) ) );
-	    		
-	    	case(4): return( ut.ricercaRisorsaPerCasaEditrice( a, InputDati.leggiStringa(INS_CASAED_RISORSA) ) );
+	       case(4): return(ut.ricercaRisorsaPerCasaEditrice(a, InputDati.leggiStringa(INS_CASAED_RISORSA)));
 	    	
-	    	default: return null;
-	    }
-	     
-    }
-    
-    public String ricercaRisorsaFormatoStringa(Utente ut, Vector <Risorsa> elencoRisorse)
-    {
-   	    StringBuffer ris = new StringBuffer();
-   	    ris.append(INTESTAZIONE_RICERCA_RISORSE);
-   	    
+	    	   default: return null;
+	    }  
+   }
+   
+   public String ricercaRisorsaFormatoStringa(Utente ut, Vector <Risorsa> elencoRisorse)
+   {
+  	    StringBuffer ris = new StringBuffer();
+  	    ris.append(INTESTAZIONE_RICERCA_RISORSE);
+  	    
 		for(int i = 0; i < elencoRisorse.size(); i++)
 		{
 			Risorsa r = elencoRisorse.get(i);
@@ -518,20 +608,21 @@ public class GestoreMenu implements Serializable
 		}
 		
 		return ris.toString();
-    }
-    
-    public boolean valutazioneDisponibilita(Utente ut, ArchivioPrestiti a)
-    {
-    	System.out.println( ricercaRisorsaFormatoStringa(ut, ricercaRisorsa(ut, a) ) );
-    	
-    	int num = InputDati.leggiIntero( RICHIESTA_DIGITAZIONE_VALUTAZIONE, NUM_MINIMO, ricercaRisorsa(ut, a).size() );
-    	
-    	if( a.controlloDisponibilitaRisorsa( ricercaRisorsa(ut, a).get(num) ))
-    		return true;
-    	else
-    		return false;
-    }
-    
+   }
+   
+   public boolean valutazioneDisponibilita(Utente ut, Archivio arc, ArchivioPrestiti ap)
+   {
+	    Vector<Risorsa> risorseTrovate = ricercaRisorsa(ut, arc, ap);
+     	System.out.println(ricercaRisorsaFormatoStringa(ut, risorseTrovate));
+   	
+     	int num = InputDati.leggiIntero(RICHIESTA_DIGITAZIONE_VALUTAZIONE, NUM_MINIMO, risorseTrovate.size());
+   	
+     	if(ap.controlloDisponibilitaRisorsa(risorseTrovate.get(num)))
+   		    return true;
+     	else
+   		    return false;
+   }
+   
     /**
      * Vengono inizialmente creati i vari menu' con le relative intestazioni ed opzioni. 
      * In seguito l'andamento del programma è scandito attraverso l'aggiornamento della variabile letteraMenu e l'uso di switch-case innestati,
@@ -561,7 +652,6 @@ public class GestoreMenu implements Serializable
         
         Fruitore attualef = null;
         Operatore attualeop = null;
-        Utente attualeut = null;
        
         System.out.println(SALUTO_INIZIALE);
           
@@ -640,7 +730,7 @@ public class GestoreMenu implements Serializable
  	        	     
  	        	    switch(scelta)
  	        	    {
- 	        	        case 1: if(attualef.rinnovaIscrizione(af))
+ 	        	        case 1: if(attualef.rinnovaIscrizione())
  	        	                     	System.out.println(RINNOVO_OK);
  	        	                 else
  	        	                  	    System.out.println(RINNOVO_NON_OK);
@@ -656,19 +746,19 @@ public class GestoreMenu implements Serializable
  	        	        		letteraMenu = 'd';
  	        	        		break;
  	        	        		
- 	        	        case 4: aggiungiPrestito(attualef, arc, ap);  /////
+ 	        	        case 4: registraPrestito(attualef, arc, ap);
  	        	        		letteraMenu = 'd';
  	        	        		break;
  	        	        		
- 	        	        case 5: richiediProroga(attualef, arc, ap);     /////
+ 	        	        case 5: richiediProroga(attualef, ap);
  	        	        		letteraMenu = 'd';
  	        	        		break;
  	        	        		
- 	        	        case 6: System.out.println( ricercaRisorsaFormatoStringa( attualef, ricercaRisorsa(attualef, ap) ) );
+ 	        	        case 6: System.out.println( ricercaRisorsaFormatoStringa( attualef, ricercaRisorsa(attualef, arc, ap) ) );
  	        	        		letteraMenu = 'd';
  	        	        		break;
  	        	        
- 	        	        case 7: if ( valutazioneDisponibilita(attualef, ap) )
+ 	        	        case 7: if ( valutazioneDisponibilita(attualef, arc, ap) )
      	     						System.out.println(RISORSA_DISPONIBILE);
      	     					else
      	     						System.out.println(RISORSA_NON_DISPONIBILE);
@@ -729,11 +819,11 @@ public class GestoreMenu implements Serializable
  	        	     	        letteraMenu = 'f';
  	        	     	        break;
  	        	     	        
- 	        	     	case 5: System.out.println( ricercaRisorsaFormatoStringa( attualeop, ricercaRisorsa(attualeop, ap) ) );
+ 	        	     	case 5: System.out.println( ricercaRisorsaFormatoStringa( attualeop, ricercaRisorsa(attualeop, arc, ap) ) );
      	     	        		letteraMenu = 'f';
  	        	     			break;
  	        	     
- 	        	     	case 6: if ( valutazioneDisponibilita(attualeop, ap) )
+ 	        	     	case 6: if ( valutazioneDisponibilita(attualeop, arc, ap) )
  	        	     				System.out.println(RISORSA_DISPONIBILE);
  	        	     			else
  	        	     				System.out.println(RISORSA_NON_DISPONIBILE);
@@ -746,33 +836,7 @@ public class GestoreMenu implements Serializable
  	        	     }
  	        	     break;
     	        }
-    	        
-    	     /*   case('g'):
-    	        {
-    	        	     scelta = g.scegli();
-
-    	        	     if(attualef == null)
-    	        	    	 attualeut = attualeop;
-    	        	     else
-    	        	    	 attualeut = attualef;
-    	        	     
-    	        	     switch(scelta)
-    	        	    {
-    	        	    	case(1): System.out.println( attualeut.ricercaRisorsaPerTitolo( ap, InputDati.leggiStringa(INS_TITOLO_RISORSA) ) );
-    	        	    			break;
-    	        	    		
-    	        	    	case(2): System.out.println( attualeut.ricercaRisorsaPerAutore( ap, InputDati.leggiStringa(INS_AUTORE_RISORSA) ) );
-    	        				 	break;
-    	        	    		
-    	        	    	case(3): System.out.println( attualeut.ricercaRisorsaPerAnnoPubblicazione( ap, InputDati.leggiIntero(INS_ANNOPUB_RISORSA) ) );
-    	        				 	break;
-    	        	    		
-    	        	    	case(4): System.out.println( attualeut.ricercaRisorsaPerCasaEditrice( ap, InputDati.leggiStringa(INS_CASAED_RISORSA) ) );
-    	        	    			break;
-    	        	    }
-    	        	     break;
-    	        }*/
-    	        
+    	          	        
     	    }
     	      
        }while(!esci);   

@@ -1,4 +1,4 @@
-package it.ing.sw.v2;
+package it.ing.sw.v3.p2;
 
 import java.io.Serializable;
 
@@ -7,12 +7,9 @@ import java.io.Serializable;
  */
 public abstract class Risorsa implements Serializable
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected String titolo;
+	protected String nome;
 	private int numLicenze;
     
 	/**
@@ -22,21 +19,17 @@ public abstract class Risorsa implements Serializable
 	 */
     public Risorsa(String t, int l)
     {
-    	    this.titolo = t;
+    	    this.nome = t;
     	    this.numLicenze = l;
     }
     
     /**
      * Metodi get per il ritorno dei vari attributi della classe Risorsa
-     * @return
      */
-    public abstract String getTitolo();
-    
-    public abstract String getAutore();
-    
-    public abstract int getAnnoPub();
-    
-    public abstract String getCasaEditrice();
+    public String getNome()
+    {
+    	return nome;
+    }
     
     public int getNumLicenze() 
     {

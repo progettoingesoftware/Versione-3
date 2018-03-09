@@ -1,23 +1,17 @@
-package it.ing.sw.v1;
+package it.ing.sw.v3.p1;
 
 import java.io.Serializable;
 
 import java.time.LocalDate;
-import java.util.*;
 
 /**
  * Questa classe contiene i dati dei vari fruitori e permette il controllo e la verifica di specifiche condizioni necessarie per il mantenimento e l'aggiornamento dei dati
  */
 public class AnagraficaFruitori extends Anagrafica implements Serializable
 {
-	
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	public static final String INTESTAZIONE_ELENCO = "Elenco degli attuali fruitori: \n";
-    public static final int DIECI_GIORNI = 10;
     public static final String ANAGRAFICA_VUOTA = "Al momento non sono presenti fruitori.\n";
 	
     /**
@@ -104,44 +98,6 @@ public class AnagraficaFruitori extends Anagrafica implements Serializable
    	 	}
 	   
     }
-    
-    /**
-     * Metodo che verifica se la data corrente sia compresa nel periodo tra i dieci giorni antecedenti la data di scadenza del servizio (prevista per uno specifico fruitore) e la stessa data di scadenza;
-     * in tal caso procede con la modifica della data di scadenza del suddetto fruitore aggiornandola con la data corrente
-     * 
-     * Pre : elenco != null
-
-     * Post : f.getDatadiScadenza().isEqual(LocalDate.now().plusYears(Fruitore.DATA_DI_SCADENZA))
-     * 
-     * @param u : username del fruitore
-     * @return boolean : true se la condizione indicata e' verificata
-     */  
-    public boolean rinnovoIscrizioneFruitore(String u)
-    {
-   	 	for(int i = 0; i < elenco.size() ; i++)
-   	 	{
-   	 			Fruitore f = (Fruitore) elenco.get(i);
-   	 			
-   	 			if(f.getUsername().equals(u))
-   	 			{
-   	 				/**
-   	 				 * La verifica della data avviene mediante due if concatenati:
-   	 				 * il primo verifica che la data corrente preceda quella di scadenza indicata per lo specifico fruitore;
-   	 				 * il secondo verifica che la data corrente succeda quella di scadenza (indicata per lo specifico fruitore) diminuita di un periodo di 10 giorni
-   	 				 */
-   	 				if((LocalDate.now().isBefore(f.getDataDiScadenza())))
-   	 				{
-       	 				if((LocalDate.now().isAfter(f.getDataDiScadenza().minusDays(DIECI_GIORNI))))
-       	 				{
-   	 						f.setDataDiScadenza(LocalDate.now().plusYears(Fruitore.TERMINE_SCADENZA));
-       	 					return true;
-       	 				}
-   	 				}
-   	 			}		
-   	 	}
-	    
-   	 	return false;
-    }  
     
     /**
      * Metodo toString() ereditato dalla classe String per la creazione di una stringa descrittiva contenente l'elenco ordinato dei vari fruitori

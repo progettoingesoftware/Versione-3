@@ -1,19 +1,16 @@
-package it.ing.sw.v1;
+package it.ing.sw.v3.p1;
 
 import java.io.Serializable;
 
-import it.ing.sw.v2.Archivio;
-import it.ing.sw.v2.Categoria;
-import it.ing.sw.v2.Risorsa;
+import it.ing.sw.v3.p2.Archivio;
+import it.ing.sw.v3.p2.Categoria;
+import it.ing.sw.v3.p2.Risorsa;
 
 /**
  * Questa classe rappresenta il modello di un Operatore
  */
 public class Operatore extends Utente implements Serializable
 {
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**

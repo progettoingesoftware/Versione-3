@@ -1,4 +1,4 @@
-package it.ing.sw.v2;
+package it.ing.sw.v3.p2;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -8,9 +8,6 @@ import java.util.Vector;
  */
 public class Archivio implements Serializable
 {  
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private Vector <Categoria> elencoCategorie;

@@ -1,4 +1,4 @@
-package it.ing.sw.v1;
+package it.ing.sw.v3.p1;
 
 import java.io.Serializable;
 

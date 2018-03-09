@@ -1,15 +1,16 @@
-package it.ing.sw.v1;
+package it.ing.sw.v3.p3;
 
 import java.io.File;
 import java.util.Vector;
 
 import it.ing.sw.*;
-import it.ing.sw.v2.Archivio;
-import it.ing.sw.v2.Categoria;
-import it.ing.sw.v2.Libro;
-import it.ing.sw.v2.SottoCategoria;
-import it.ing.sw.v3.ArchivioPrestiti;
-import it.ing.sw.v3.GestoreMenu;
+import it.ing.sw.v3.p1.AnagraficaFruitori;
+import it.ing.sw.v3.p1.AnagraficaOperatori;
+import it.ing.sw.v3.p1.Operatore;
+import it.ing.sw.v3.p2.Archivio;
+import it.ing.sw.v3.p2.Categoria;
+import it.ing.sw.v3.p2.Libro;
+import it.ing.sw.v3.p2.SottoCategoria;
 
 public class Main 
 {
@@ -35,11 +36,11 @@ public class Main
 		Operatore quarto = new Operatore("Fabio", "Piccinelli", "picci", "fighter118");
 		Operatore quinto = new Operatore("Ottavia", "Lauretti", "oct4565", "ppla210");
 		
-		ao.elenco.addElement(primo);
-		ao.elenco.addElement(secondo);
-		ao.elenco.addElement(terzo);
-		ao.elenco.addElement(quarto);
-		ao.elenco.addElement(quinto);
+		ao.getElenco().addElement(primo);
+		ao.getElenco().addElement(secondo);
+		ao.getElenco().addElement(terzo);
+		ao.getElenco().addElement(quarto);
+		ao.getElenco().addElement(quinto);
 	}
 	
 	/**

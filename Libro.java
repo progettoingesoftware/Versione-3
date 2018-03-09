@@ -1,4 +1,4 @@
-package it.ing.sw.v2;
+package it.ing.sw.v3.p2;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -8,9 +8,6 @@ import java.util.Vector;
  */
 public class Libro extends Risorsa implements Serializable
 {
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private String titolo;
@@ -35,7 +32,7 @@ public class Libro extends Risorsa implements Serializable
      * @param np: numero delle pagine del libro
      * @param ap: anno di pubblicazione del libro
      * @param ce: casa editrice del libro
-     * @param l: lingua in cui è scritto il libro
+     * @param l: lingua in cui e' scritto il libro
      * @param g: genere del libro
      */
     public Libro(int licenze, String t, Vector <String> a, int np, int ap, String ce, String l, String g)
@@ -51,7 +48,7 @@ public class Libro extends Risorsa implements Serializable
     }
     
     /**
-     * Medoto get per il ritorno dell'attributo titolo del libro
+     * Metodi get per il ritorno dei vari attributi della classe Libro
      */
     public String getTitolo()
     {

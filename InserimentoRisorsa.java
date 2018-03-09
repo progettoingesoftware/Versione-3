@@ -1,5 +1,6 @@
-package it.ing.sw.v2;
+package it.ing.sw.v3.p2;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Vector;
 
@@ -9,9 +10,11 @@ import it.ing.sw.InputDati;
  * Questa classe e' di appoggio per l'inserimento dei dati relativi ad una risorsa nei metodi aggiungiRisorsa() e 
  * rimuoviRisorsa() della classe GestoreMenu
  */
-public class InserimentoRisorsa 
+public class InserimentoRisorsa implements Serializable
 {
-    public static final String INS_TITOLO = "Inserisci il titolo del libro:\n";
+	private static final long serialVersionUID = 1L;
+	
+	public static final String INS_TITOLO = "Inserisci il titolo del libro:\n";
     public static final String INS_NUMLICENZE = "Inserisci il numero delle licenze del libro:\n";
     public static final String INS_AUTORE = "Inserisci l'autore del libro(uno alla volta):\n";
     public static final String INS_ALTRO_AUTORE = "Vuoi inserire un altro autore (S/N)?\n";
@@ -22,7 +25,7 @@ public class InserimentoRisorsa
     public static final String INS_LINGUA = "Inserisci la lingua in cui e' scritto il libro:\n";
     public static final String INS_GENERE = "Inserisci il genere del libro:\n";
     
-    public static final int MIN_LICENZE = 0;
+    public static final int MIN_LICENZE = 1;
     public static final int MAX_LICENZE = 20;
     public static final int MIN_ANNOP = 1900;
     

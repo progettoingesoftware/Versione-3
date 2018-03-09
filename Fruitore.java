@@ -1,21 +1,18 @@
-package it.ing.sw.v1;
+package it.ing.sw.v3.p1;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Vector;
 
-import it.ing.sw.v2.Risorsa;
-import it.ing.sw.v3.ArchivioPrestiti;
-import it.ing.sw.v3.Prestito;
+import it.ing.sw.v3.p3.ArchivioPrestiti;
+import it.ing.sw.v3.p3.Prestito;
 
 /**
  * Questa classe rappresenta il modello di un Fruitore
  */
 public class Fruitore extends Utente implements Serializable
 {
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private LocalDate dataDiNascita;             
@@ -24,7 +21,10 @@ public class Fruitore extends Utente implements Serializable
       
     public static final String DESCRIZIONE_FRUITORE = "\nNome: %s\nCognome: %s\nUsername: %s\nPassword: %s\nData di nascita: %s\nData di iscrizione: %s\nData di scadenza: %s\n";
     public static final int TERMINE_SCADENZA = 5;
+    public static final int DIECI_GIORNI = 10;
     public static final String FORMATO_DATA = "dd/MM/yyyy";
+    public static final String NO_PRESTITI_ATTIVI = "Al momento non ci sono prestiti\n";
+    public static final String PRESTITI_ATTIVI = "Elenco dei prestiti attivi:\n";
     
     /**
      * Metodo costruttore della classe Fruitore
@@ -86,28 +86,84 @@ public class Fruitore extends Utente implements Serializable
    	 	dataDiScadenza = nuovads;
     }
     
-    public String visualizzaPrestitiInCorso(ArchivioPrestiti ap)
+    /**
+     * Metodo che consente al fruitore di rinnovare l'iscrizione. La verifica della data avviene mediante due if concatenati:
+     * il primo verifica che la data corrente preceda quella di scadenza indicata per lo specifico fruitore;
+	 * il secondo verifica che la data corrente succeda quella di scadenza (indicata per lo specifico fruitore) diminuita di un periodo di 10 giorni
+     * @param af: l'anagrafica fruitore
+     * @return true se il fruitore può effettuare l'iscrizione
+     */
+    public boolean rinnovaIscrizione()
     {
-    	return ap.getPrestiti(this.getUsername());
-    }
-    
-    public boolean rinnovaIscrizione(AnagraficaFruitori af)
-    {
-    	return af.rinnovoIscrizioneFruitore(getUsername());
-    }
-    
-    public void registraNuovoPrestito(ArchivioPrestiti ap, Prestito p)
-    {
-    	ap.aggiungiPrestito(p);
-    }
-    
-    public boolean registraProrogaPrestito(ArchivioPrestiti ap, Prestito p)
-    {
-    	return ap.prorogaPrestito(p);
+		 if((LocalDate.now().isBefore(dataDiScadenza)))
+		 {
+	        if((LocalDate.now().isAfter(dataDiScadenza.minusDays(DIECI_GIORNI))))
+	 		{
+				setDataDiScadenza(LocalDate.now().plusYears(TERMINE_SCADENZA));
+	 			return true;
+	 		}
+		 }
+		 
+		 return false;
     }
     
     /**
-     * Metodo toString() ereditato dalla classe String per la creazione di una stringa descrittiva contenente i vari attributi dell'oggetto Fruitore
+     * Metodo che ritorna una stringa contenente i prestiti relativi al fruitore
+     * 
+     * Pre: ap != null
+     * 
+     * @param ap: l'archivio dei prestiti
+     * @return la stringa dei prestiti relativi al fruitore
+     */
+    public String visualizzaPrestitiInCorso(ArchivioPrestiti ap)
+    {
+    	    Vector <Prestito> ris = new Vector <Prestito> ();
+    	    StringBuffer r = new StringBuffer();
+    	    ris = ap.getPrestiti(this.getUsername());
+    	    
+    	    if(ris.size() == 0)
+    	    	    r.append(NO_PRESTITI_ATTIVI);
+    	    else
+    	    {
+    	        r.append(PRESTITI_ATTIVI);
+    	    	    for(int i = 0; i < ris.size(); i++)
+    	    	    {
+    	    		   Prestito p = ris.get(i);
+    	   		   r.append(i+1 + ")" + p.toString() +"\n");
+    	    	    }
+    	    }
+    	    
+      	return r.toString();
+    }
+    
+    /**
+     * Metodo che permette al fruitore di registrare un nuovo prestito
+     * 
+     * Pre: ap != null
+     * Post: p in ap
+     * 
+     * @param ap: l'archivio prestiti in cui registrare il nuovo prestito
+     * @param p: il nuovo prestito
+     */
+    public void registraNuovoPrestito(ArchivioPrestiti ap, Prestito p)
+    {
+      	ap.aggiungiPrestito(p);
+    }
+    
+    /**
+    * Metodo che permette al fruitore di registrare la proroga di un prestito
+    * 
+    * Pre: p != null
+    *
+    * @param p: il prestito di cui registrare la proroga
+    */
+    public boolean registraProrogaPrestito(Prestito p)
+    {
+    	    return p.prorogaPrestito();
+    }
+    
+    /**
+     * Metodo toString() per la creazione di una stringa descrittiva contenente i vari attributi dell'oggetto Fruitore
      * @return la stringa descrittiva
      */
     public String toString()
@@ -118,5 +174,6 @@ public class Fruitore extends Utente implements Serializable
       	ris.append(String.format(DESCRIZIONE_FRUITORE, getNome(), getCognome(), getUsername(), getPassword(), dataDiNascita.format(formatter), dataDiIscrizione.format(formatter), dataDiScadenza.format(formatter)));
         return ris.toString();
     } 
+    
     
 }

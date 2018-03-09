@@ -1,4 +1,4 @@
-package it.ing.sw.v1;
+package it.ing.sw.v3.p1;
 
 import java.io.Serializable;
 
@@ -7,9 +7,6 @@ import java.io.Serializable;
  */
 public class AnagraficaOperatori extends Anagrafica implements Serializable
 {
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
