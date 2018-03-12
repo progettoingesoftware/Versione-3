@@ -124,20 +124,20 @@ public class ArchivioPrestiti
 	    		  	 num++;
 	    }
 	    
-	    if(c.getNumeroMaxRisorseInPrestito() < num)
+	    if(c.getNumeroMaxRisorseInPrestito() > num)
 	         return true;
 	    else
 	         return false;
 	}
 	
 	/**
-	 * Metodo per il controllo della disponibilità di una risorsa
+	 * Metodo per il controllo della disponibilita' di una risorsa
 	 * 
 	 * Pre: elencoPrestiti != null
 	 * 
 	 * @param r: la risorsa di cui effettuare il controllo
-	 * @return boolean: true se il numero delle licenze della risorsa è inferiore o uguale
-	 *         al numero dei prestiti in cui la risorsa è coinvolta
+	 * @return boolean: true se il numero delle licenze della risorsa e' inferiore o uguale
+	 *         al numero dei prestiti in cui la risorsa e' coinvolta
 	 */
 	public boolean controlloDisponibilitaRisorsa(Risorsa r)
 	{
@@ -151,12 +151,12 @@ public class ArchivioPrestiti
 	    		    	num++;
 	    }
 	    
-	    if(r.getNumLicenze() < num)
+	    if(r.getNumLicenze() > num)
 	    	     return true;
 	    else
 	         return false;
 	}
-	
+
 	/**
 	 * Metodo per la ricerca di una risorsa in archivio in base al titolo o ad una parola
 	 * contenuta nel titolo

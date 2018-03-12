@@ -9,26 +9,26 @@ public abstract class Risorsa implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
-	protected String nome;
+	protected String titolo;
 	private int numLicenze;
     
 	/**
 	 * Metodo costruttore della classe Risora
-	 * @param n: il nome con cui identificare la risorsa
-	 * @param l: il numero delle licenze associate alla risorsa
+	 * @param titolo: il titolo con cui identificare la risorsa
+	 * @param lic: il numero delle licenze associate alla risorsa
 	 */
-    public Risorsa(String t, int l)
+    public Risorsa(String t, int lic)
     {
-    	    this.nome = t;
-    	    this.numLicenze = l;
+    	    this.titolo = t;
+    	    this.numLicenze = lic;
     }
     
     /**
      * Metodi get per il ritorno dei vari attributi della classe Risorsa
      */
-    public String getNome()
+    public String getTitolo()
     {
-    	return nome;
+    	return titolo;
     }
     
     public int getNumLicenze() 

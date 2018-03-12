@@ -25,10 +25,20 @@ public class Categoria implements Serializable
    public static final String DESCRIZIONE_CATEGORIA_COMPOSTA = "Nome categoria: %s\nSottocategorie in essa contenute:\n";
    public static final String ELENCO_SOTTOCATEGORIE_VUOTO = "\tAl momento non sono presenti sottocategorie\n";
    public static final String ELENCO_RISORSE_VUOTO = "\t\tAl momento non sono presenti risorse\n";
-   
+
+   public static final String RIC_PER_TITOLO = "titolo";
+   public static final String RIC_PER_AUTORE_I = "autore_i";
+   public static final String RIC_PER_GENERE = "genere";
+   public static final String RIC_PER_ANNOPUB = "annoPub";
+   public static final String RIC_PER_CASAED = "casaEditrice";
+ 
    /**
     * Metodo costruttore della classe Categoria
     * @param n: il nome della categoria
+    * @param numPres: la durata massima del prestito in giorni
+    * @param numMaxPro: la durata massima della proroga in giorni
+    * @param numRiPro: l'intervallo di tempo in giorni entro cui e' richiedibile la proroga
+    * @param numRis: il numero massimo di risorse che un fruitore puo' avere in prestito contemporaneamente
     */
    public Categoria(String n, int numPres, int numMaxPro, int numRiPro, int numRis)
    {
@@ -106,19 +116,19 @@ public class Categoria implements Serializable
    }
    
    /**
-    * Data una stringa n, questo metodo restituisce l'oggetto Risorsa avente n come nome, se e' presente
+    * Data una stringa t, questo metodo restituisce l'oggetto Risorsa avente t come titolo, se e' presente
     * 
     * Pre: elencoRisorse != null
     * 
-    * @param n: il nome identificativo di una risorsa
-    * @return l'oggetto Risorsa avente n come nome altrimenti null
+    * @param t: il titolo identificativo di una risorsa
+    * @return l'oggetto Risorsa avente t come titolo altrimenti null
     */
-   public Risorsa getRisorsa(String n)
+   public Risorsa getRisorsa(String t)
    {
 	   for(int i = 0; i < elencoRisorse.size(); i++)
 	   {
 		   Risorsa r = elencoRisorse.get(i);
-		   if(r.getNome().equalsIgnoreCase(n))
+		   if(r.getTitolo().equalsIgnoreCase(t))
 			   return r;
 	   }
 	   
@@ -150,6 +160,80 @@ public class Categoria implements Serializable
    {
 	   elencoRisorse.remove(r);
    }
+ 
+   /**
+    * Medoto per la ricerca delle risorse all'interno dell'elenco delle risorse
+    * 
+    * Pre: o != null
+    * 
+    * @param o: il generico oggetto che rappresenta quello che l'utente ha digitato con lo scopo di cercarlo nella categoria
+    * @param cr: stringa che specifica in base a quale parametro avviene la ricerca
+    * @return il vettore con all'interno le risorse che hanno soddisfatto la ricerca
+    */
+   public Vector <Risorsa> ricercaRisorseInElenco(Object o, String cr)
+   {
+   	    Vector <Risorsa> risorseCercate = new Vector <>();
+   	    
+   	    for(int i = 0; i < elencoRisorse.size(); i++)
+   	    {
+   	    	    Risorsa r = elencoRisorse.get(i);
+   	    	    
+   	    	    switch(cr)
+   	    	    {
+   	    	        case RIC_PER_TITOLO: if(r.getTitolo().indexOf((String)o) > -1)
+  	    	    	                         risorseCercate.add(r);
+   	    	                             break;
+   	    	                       
+   	    	        case RIC_PER_AUTORE_I: if(((Libro)r).getAutore().indexOf((String)o) > -1)
+     	                     	              risorseCercate.add(r);
+                                       		break;
+   	    	                       
+   	    	        case RIC_PER_GENERE: if(((Libro)r).getGenere().equalsIgnoreCase((String)o))
+   	    	        	                     	      risorseCercate.add(r);
+   	    	                             break;
+   	    	                    
+   	    	        case RIC_PER_ANNOPUB: if(((Libro)r).getAnnoPub() ==  (Integer)o)
+     	                     	              risorseCercate.add(r);
+   	    	        					  break;
+                      
+   	    	        case RIC_PER_CASAED: if(((Libro)r).getCasaEditrice().equalsIgnoreCase((String)o))
+     	                     	               risorseCercate.add(r);
+   	    	        					 break;
+   	    	    } 	     
+   	    }
+   	    
+   	    return risorseCercate;
+   }
+   
+   /**
+    * Metodo per la ricerca di risorse all'interno della categoria oppure all'interno
+    * delle varie sottocategorie della categoria, se presenti
+    * 
+    * Pre: o != null
+    * 
+    * @param o: il generico oggetto che rappresenta quello che l'utente ha digitato con lo scopo di cercarlo nella categoria
+    * @param comeRicercare: stringa che specifica in base a quale parametro avviene la ricerca
+    * @return il vettore con all'interno le risorse che hanno soddisfatto la ricerca
+    */
+   public Vector <Risorsa> ricercaRisorse(Object o, String comeRicercare)
+   {
+	   Vector <Risorsa> risorseCercate = new Vector <>();
+	   
+	   if(elencoSottoCategorie == null)
+	   { 
+		   risorseCercate = ricercaRisorseInElenco(o, comeRicercare);
+	   }
+	   else
+	   {
+		   for(int i = 0; i < elencoSottoCategorie.size(); i++)
+		   {
+			   SottoCategoria sc = elencoSottoCategorie.get(i);
+			   risorseCercate.addAll(sc.ricercaRisorseInElenco(o, comeRicercare));
+		   }
+	   }
+	   
+	   return risorseCercate;
+   }
    
    /**
     * Metodo per l'aggiunta di una sottocategoria all'elenco delle sottocategorie, viene invocato al momento della creazione
@@ -165,11 +249,11 @@ public class Categoria implements Serializable
    }
    
    /**
-    * Metodo per la semplice stampa dell'elenco dei nomi delle risorse contenuti in elencoRisorse
+    * Metodo per la semplice stampa dell'elenco dei titoli delle risorse contenuti in elencoRisorse
     *
     * Pre: elencoRisorse != null
     * 
-    * @return la stringa con l'elenco dei nomi delle risorse
+    * @return la stringa con l'elenco dei titoli delle risorse
     */
    public String stampaElencoRisorse()
    {
@@ -178,7 +262,7 @@ public class Categoria implements Serializable
  	   for(int i = 0; i < elencoRisorse.size(); i++)
  	   {
  		   Risorsa r = elencoRisorse.get(i);
- 		   ris.append(i+1 + ")"+ r.getNome() + "\n");
+ 		   ris.append(i+1 + ")"+ r.getTitolo() + "\n");
  	   }
  	   
  	   return ris.toString();

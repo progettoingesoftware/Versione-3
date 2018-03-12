@@ -7,8 +7,8 @@ import java.util.Vector;
 import it.ing.sw.InputDati;
 
 /**
- * Questa classe e' di appoggio per l'inserimento dei dati relativi ad una risorsa nei metodi aggiungiRisorsa() e 
- * rimuoviRisorsa() della classe GestoreMenu
+ * Questa classe e' di appoggio per l'inserimento dei dati relativi ad una risorsa nel metodo aggiungiRisorsa() 
+ * della classe GestoreMenu
  */
 public class InserimentoRisorsa implements Serializable
 {
