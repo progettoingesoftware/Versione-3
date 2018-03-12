@@ -95,7 +95,7 @@ public class Prestito
     public boolean prorogaPrestito()
     {
     	   /**
-   	 	* Il primo if verifica che non sia già stata effettuata la proroga per il prestito
+   	 	* Il primo if verifica che non sia gia' stata effettuata la proroga per il prestito
    	 	* Il secondo if verifica che la proroga sia richiesta nel corretto intervallo di tempo
    	 	*/
         if(prorogaNonEffettuata)

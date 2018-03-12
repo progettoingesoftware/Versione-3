@@ -22,7 +22,7 @@ public class SottoCategoria extends Categoria implements Serializable
      * 
      * Post: elencoRisorse != null
      * 
-     * @param ns
+     * @param ns : nome della sottocategoria
      */
     public SottoCategoria(String ns)
     {
