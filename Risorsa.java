@@ -1,4 +1,4 @@
-package it.ing.sw.v3.p2;
+package dominio_3;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ public abstract class Risorsa implements Serializable
     
 	/**
 	 * Metodo costruttore della classe Risora
-	 * @param titolo: il titolo con cui identificare la risorsa
+	 * @param t: il titolo con cui identificare la risorsa
 	 * @param lic: il numero delle licenze associate alla risorsa
 	 */
     public Risorsa(String t, int lic)

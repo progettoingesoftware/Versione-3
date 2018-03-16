@@ -1,20 +1,19 @@
-package it.ing.sw.v3.p3;
+package interazione_3;
 
 import java.io.Serializable;
 import java.time.DateTimeException;
 import java.util.Vector;
 
-import it.ing.sw.*;
-import it.ing.sw.v3.p1.*;
-import it.ing.sw.v3.p2.*;
+import dominio_3.*;
+import logica_3.*;
+import utility.*;
 
 import java.time.*;
 
 /**
- * Questa classe permette una corretta gestione dell'uso dei menu'. E' essenzialmente suddivisa in tre parti:
- * 1 - Elenco delle costanti che costituiscono le intestazioni dei menu' e le varie opzioni che li compongono
- * 2 - Metodi ausiliari per la gestione delle funzionalita' basilari del software (iscrizione, accesso)
- * 3 - Metodo logicaMenu per la realizzazione delle connessioni tra i vari menu'
+ * Questa classe permette una corretta gestione dell'uso dei menu'. E' essenzialmente suddivisa in due parti:
+ * 1 - Metodi ausiliari per la gestione delle funzionalita' basilari del software (iscrizione, accesso)
+ * 2 - Metodo logicaMenu per la realizzazione delle connessioni tra i vari menu'
  */
 public class GestoreMenu implements Serializable
 {
@@ -225,70 +224,76 @@ public class GestoreMenu implements Serializable
      * @param op: l'operatore che effettua l'aggiunta della risorsa
      * @param arc: l'archivio a cui aggiungere la risorsa
      */
-     public void aggiungiRisorsa(Operatore op, Archivio arc)
-     {
-     	Categoria c = null;
-     	SottoCategoria sc = null;
-     	Libro nuovol = null;
-     	     
-     	System.out.printf(Costanti.CONTENUTO_ARC, arc.stampaElencoCategorie());
-     	
-         int num1 = InputDati.leggiIntero(Costanti.INS_NUMERO_CAT_AGGIUNTA_RISORSA, Costanti.NUM_MINIMO, (arc.getElencoCategorie()).size());
-         c = (arc.getElencoCategorie()).get(num1-Costanti.NUM_MINIMO);
-         
-         if(c.getElencoSottoCategorie() == null)
-         {
-         	System.out.printf(Costanti.CAT_SENZA_SOTTO, c.getNome());
-           	    
-           	if(InputDati.leggiUpperChar(Costanti.INS_PROCEDERE_CAT, "SN") == 'S')
-           	{
-           		if((c.getNome()).equalsIgnoreCase("Libri"))  
-           		{
-           			nuovol = InserimentoRisorsa.inserisciLibro();
-         	    	    	    	    	       
-           			if(c.getRisorsa(nuovol.getTitolo()) == null )
-           			{
-           				op.aggiungiRisorsaCategoria(nuovol, c);
-           				System.out.println(Costanti.OP_SUCCESSO);
-           			}
-           			else
-           				System.out.println(Costanti.OP_NO_SUCCESSO_AGGIUNTA);
-           		}
-           			
-           	}
-           	    
-         }
-         else if(c.getElencoSottoCategorie().size() == 0)
-         {
-         	System.out.printf(Costanti.CONTENUTO_ELENCO_SOTTO_VUOTO, c.getNome());
-         }
-         else
-         {
-         	System.out.printf(Costanti.CONTENUTO_CAT_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
-             	
-             if(InputDati.leggiUpperChar(Costanti.INS_PROCEDERE_SOTTO, "SN") == 'S')
-             {	 
-             	int num2 = InputDati.leggiIntero(Costanti.INS_NUMERO_SOTTO_AGGIUNTA_RISORSA, Costanti.NUM_MINIMO, (c.getElencoSottoCategorie()).size());
-             	sc = (c.getElencoSottoCategorie()).get(num2-Costanti.NUM_MINIMO);
-         	    	    	    	    	    
-             	if((c.getNome()).equalsIgnoreCase("Libri"))  
-             	{
-             		nuovol = InserimentoRisorsa.inserisciLibro();
-         	    	    	    	    	       
-       	    	   	if( (sc.getRisorsa(nuovol.getTitolo()) == null) && (nuovol.getGenere()).equalsIgnoreCase(sc.getNome()) )
-       	    	   	{
-       	    	   		op.aggiungiRisorsaCategoria(nuovol, sc);
-       	    	   		System.out.println(Costanti.OP_SUCCESSO);
-       	    	   	}
-       	    	   	else
-       	    	   		System.out.println(Costanti.OP_NO_SUCCESSO_AGGIUNTA);
-             	}
-             	
-             }
-         	    
-         }
-           	
-     }
+    public void aggiungiRisorsa(Operatore op, Archivio arc)
+    {
+    	Categoria c = null;
+    	SottoCategoria sc = null;
+    	Libro nuovol = null;
+    	     
+    	System.out.printf(Costanti.CONTENUTO_ARC, arc.stampaElencoCategorie());
+    	
+        int num1 = InputDati.leggiIntero(Costanti.INS_NUMERO_CAT_AGGIUNTA_RISORSA, Costanti.NUM_MINIMO, (arc.getElencoCategorie()).size());
+        c = (arc.getElencoCategorie()).get(num1-Costanti.NUM_MINIMO);
+        
+        if(c.getElencoSottoCategorie() == null)
+        {
+        	System.out.printf(Costanti.CAT_SENZA_SOTTO, c.getNome());
+          	    
+          	if(InputDati.leggiUpperChar(Costanti.INS_PROCEDERE_CAT, "SN") == 'S')
+          	{
+          		if((c.getNome()).equalsIgnoreCase(Costanti.LIBRI))  
+          		{
+          			nuovol = InserimentoRisorsa.inserisciLibro();
+        	    	    	    	    	       
+          			if(c.getRisorsa(nuovol.getTitolo()) == null )
+          			{
+          				op.aggiungiRisorsaCategoria(nuovol, c);
+          				System.out.println(Costanti.OP_SUCCESSO);
+          			}
+          			else
+          				System.out.println(Costanti.OP_NO_SUCCESSO_AGGIUNTA_1);
+          		}
+          			
+          	}
+          	    
+        }
+        else if(c.getElencoSottoCategorie().size() == Costanti.VUOTO)
+        {
+        	System.out.printf(Costanti.CONTENUTO_ELENCO_SOTTO_VUOTO, c.getNome());
+        }
+        else
+        {
+        	System.out.printf(Costanti.CONTENUTO_CAT_SOTTO, c.getNome(), c.stampaElencoSottocategorie());
+            	
+            if(InputDati.leggiUpperChar(Costanti.INS_PROCEDERE_SOTTO, "SN") == 'S')
+            {	 
+            	int num2 = InputDati.leggiIntero(Costanti.INS_NUMERO_SOTTO_AGGIUNTA_RISORSA, Costanti.NUM_MINIMO, (c.getElencoSottoCategorie()).size());
+            	sc = (c.getElencoSottoCategorie()).get(num2-Costanti.NUM_MINIMO);
+        	    	    	    	    	    
+            	if((c.getNome()).equalsIgnoreCase(Costanti.LIBRI))  
+            	{
+            		nuovol = InserimentoRisorsa.inserisciLibro();
+            		
+            		if(!(c.verificaPresenza(nuovol.getTitolo())))
+            		{
+        	    	    	    	    	       
+      	    	   		if( (nuovol.getGenere()).equalsIgnoreCase(sc.getNome()) )
+      	    	   		{
+      	    	   			op.aggiungiRisorsaCategoria(nuovol, sc);
+      	    	   			System.out.println(Costanti.OP_SUCCESSO);
+      	    	   		}
+      	    	   		else
+      	    	   			System.out.println(Costanti.OP_NO_SUCCESSO_AGGIUNTA_2);
+            		}
+            		else
+            			System.out.println(Costanti.OP_NO_SUCCESSO_AGGIUNTA_1);
+            	}
+            	
+            }
+        	    
+        }
+          	
+    }
      
      /**
       * Metodo per la rimozione di una risorsa da una (sotto)categoria dell'archivio
@@ -394,17 +399,26 @@ public class GestoreMenu implements Serializable
        	    if(c.getElencoRisorse().size() != Costanti.VUOTO)  
      	    {
        	    	     System.out.printf(Costanti.CONTENUTO_CAT_RISORSA, c.getNome(), c.stampaElencoRisorse());
-     	      	 int num = InputDati.leggiIntero(Costanti.INS_NUMERO_RISORSA_PRESTITO, Costanti.NUM_MINIMO, c.getElencoRisorse().size());
-     	         r = c.getElencoRisorse().get(num-Costanti.NUM_MINIMO);
+       	    	     
+       	    	     if(InputDati.leggiUpperChar(Costanti.INS_PROCEDERE_PRESTITO, "SN") == 'S')
+       	    	     {
+       	    	    	 int num = InputDati.leggiIntero(Costanti.INS_NUMERO_RISORSA_PRESTITO, Costanti.NUM_MINIMO, c.getElencoRisorse().size());
+       	    	    	 r = c.getElencoRisorse().get(num-Costanti.NUM_MINIMO);
      	    	
-   	    	   	     if(ap.controlloDisponibilitaRisorsa(r) && ap.controlloPerUlteriorePrestito(c, f))
-   	    	   	     {
-   	    	   		    nuovo = new Prestito(c, f, r);
-   	    	   		    f.registraNuovoPrestito(ap, nuovo);
-   	    	    	        System.out.println(Costanti.OP_SUCCESSO);
-   	    	   	     }
-   	    	   	     else
-   	    	       	    System.out.println(Costanti.OP_NO_SUCCESSO_PRESTITO);
+       	    	    	 if(ap.controlloDisponibilitaRisorsa(r) && ap.controlloPerUlteriorePrestito(c, f.getUsername()) && !(ap.verificaPresenza(r, f.getUsername())))
+       	    	    	 {
+       	    	    		 nuovo = new Prestito(c, f, r);
+       	    	    		 f.registraNuovoPrestito(ap, nuovo);
+       	    	    		 System.out.println(Costanti.OP_SUCCESSO);
+       	    	    	 }
+       	    	    	 else if(!(ap.controlloDisponibilitaRisorsa(r)))
+       	    	    		 System.out.println(Costanti.OP_NO_SUCCESSO_PRESTITO_1);
+       	    	    	 else if(!(ap.controlloPerUlteriorePrestito(c, f.getUsername())))
+       	    	    		 System.out.println(Costanti.OP_NO_SUCCESSO_PRESTITO_2);
+       	    	    	 else
+       	    	    		 System.out.println(Costanti.OP_NO_SUCCESSO_PRESTITO_3);
+       	    	     }
+
      	    } 
        	    else
        	    	    System.out.printf(Costanti.CONTENUTO_ELENCO_RISORSE_CAT_VUOTO, c.getNome());
@@ -420,23 +434,33 @@ public class GestoreMenu implements Serializable
      	    sc = (c.getElencoSottoCategorie()).get(num2-Costanti.NUM_MINIMO);
      	    	    	    	    	    
      	    if((sc.getElencoRisorse()).size() != Costanti.VUOTO)
-	        {
-	           System.out.printf(Costanti.CONTENUTO_SOTTO, sc.getNome(), sc.stampaElencoRisorse());
-	           int num = InputDati.leggiIntero(Costanti.INS_NUMERO_RISORSA_PRESTITO, Costanti.NUM_MINIMO, c.getElencoRisorse().size());
- 	       	   r = sc.getElencoRisorse().get(num-Costanti.NUM_MINIMO);
-
- 	    	   	   if(ap.controlloDisponibilitaRisorsa(r) && ap.controlloPerUlteriorePrestito(c, f))
- 	    	       {
-   	    	   		  nuovo = new Prestito(c, f, r);
-   	    	   		  f.registraNuovoPrestito(ap, nuovo);
- 	    	      	  System.out.println(Costanti.OP_SUCCESSO);
- 	    	       }
- 	    	       else
- 	    	      	  System.out.println(Costanti.OP_NO_SUCCESSO_PRESTITO);
+     	    {
+ 	            System.out.printf(Costanti.CONTENUTO_SOTTO, sc.getNome(), sc.stampaElencoRisorse());
+  
+     	    	if(InputDati.leggiUpperChar(Costanti.INS_PROCEDERE_PRESTITO, "SN") == 'S')
+     	    	{
+     	    		int num = InputDati.leggiIntero(Costanti.INS_NUMERO_RISORSA_PRESTITO, Costanti.NUM_MINIMO, sc.getElencoRisorse().size());
+     	    		r = sc.getElencoRisorse().get(num-Costanti.NUM_MINIMO);
+ 	
+ 	    	    	 if(ap.controlloDisponibilitaRisorsa(r) && ap.controlloPerUlteriorePrestito(c, f.getUsername()) && !(ap.verificaPresenza(r, f.getUsername())))
+   	    	    	 {
+   	    	    		 nuovo = new Prestito(c, f, r);
+   	    	    		 f.registraNuovoPrestito(ap, nuovo);
+   	    	    		 System.out.println(Costanti.OP_SUCCESSO);
+   	    	    	 }
+   	    	    	 else if(!(ap.controlloDisponibilitaRisorsa(r)))
+   	    	    		 System.out.println(Costanti.OP_NO_SUCCESSO_PRESTITO_1);
+   	    	    	 else if(!(ap.controlloPerUlteriorePrestito(c, f.getUsername())))
+   	    	    		 System.out.println(Costanti.OP_NO_SUCCESSO_PRESTITO_2);
+   	    	    	 else
+   	    	    		 System.out.println(Costanti.OP_NO_SUCCESSO_PRESTITO_3); 		
+     	    	}
+     	    	
 	       }
      	   else
-     		    System.out.println(Costanti.CONTENUTO_ELENCO_RISORSE_SOTTO_VUOTO);	     
-     	}	
+     		    System.out.printf(Costanti.CONTENUTO_ELENCO_RISORSE_SOTTO_VUOTO, sc.getNome());	     
+     	}
+       	    
      }
       
      /**
@@ -492,7 +516,7 @@ public class GestoreMenu implements Serializable
     	    int num1 = InputDati.leggiIntero(Costanti.INS_NUMERO_CAT_RICERCA, Costanti.NUM_MINIMO, (arc.getElencoCategorie()).size());
     	    c = (arc.getElencoCategorie()).get(num1-Costanti.NUM_MINIMO);
     	 		
-    	 	if(c.getNome().equalsIgnoreCase("Libri"))
+    	 	if(c.getNome().equalsIgnoreCase(Costanti.LIBRI))
  				return ricercaRisorsaLibri(ut, c);
    
     	 	return null;
@@ -516,23 +540,23 @@ public class GestoreMenu implements Serializable
     	
     	    switch(numScelta)
     	    {
- 	    	   case(1): o = InputDati.leggiStringa(Costanti.INS_TITOLO_RISORSA);
+ 	    	   case 1: o = InputDati.leggiStringa(Costanti.INS_TITOLO_RISORSA);
  	    			    s = Categoria.RIC_PER_TITOLO;
  	    			    break;
  	    		
- 	    	   case(2): o = InputDati.leggiStringa(Costanti.INS_AUTORE_LIBRO); 
+ 	    	   case 2: o = InputDati.leggiStringa(Costanti.INS_AUTORE_LIBRO); 
  	    		        s = Categoria.RIC_PER_AUTORE_I;
  	    		        break;
  	       
- 	    	   case(3): o = InputDati.leggiStringa(Costanti.INS_GENERE_RISORSA);
+ 	    	   case 3: o = InputDati.leggiStringa(Costanti.INS_GENERE_RISORSA);
  	    		        s = Categoria.RIC_PER_GENERE;
  	    		        break;
  	    	   
- 	    	   case(4): o = InputDati.leggiIntero(Costanti.INS_ANNOPUB_RISORSA);
+ 	    	   case 4: o = InputDati.leggiIntero(Costanti.INS_ANNOPUB_RISORSA);
  	    	   			s = Categoria.RIC_PER_ANNOPUB;
  	    	   			break;
  	    		
- 	    	   case(5): o = InputDati.leggiStringa(Costanti.INS_CASAED_LIBRO);
+ 	    	   case 5: o = InputDati.leggiStringa(Costanti.INS_CASAED_LIBRO);
  	    	   			s = Categoria.RIC_PER_CASAED;
  	    	   			break;
     	    }  
@@ -560,7 +584,7 @@ public class GestoreMenu implements Serializable
  		for(int i = 0; i < elencoRisorse.size(); i++)
  		{
  			Risorsa r = elencoRisorse.get(i);
- 			ris.append((i+1) + ")" + r.toString());
+ 			ris.append("\t\t" + (i+1) + ")" + r.toString());
  		}
  		
  		return ris.toString();
@@ -627,8 +651,8 @@ public class GestoreMenu implements Serializable
         do
         {
         	af.decadenzaFruitore();
-        	ap.scadenzaPrestito();
-
+        	ap.scadenzaPrestito();    
+        	
            	switch(letteraMenu)
     	    {
     	      	case('a'):
@@ -646,7 +670,9 @@ public class GestoreMenu implements Serializable
 	        	        case 3: esci = true;
 	        	        		break;
 	        	    }
-    	    		    
+    	    		
+    	        	af.decadenzaFruitore();
+    	        	ap.scadenzaPrestito();    
     	    		break;
     	        }
     	          
@@ -667,6 +693,8 @@ public class GestoreMenu implements Serializable
 								break;
 					}
 
+		        	af.decadenzaFruitore();
+		        	ap.scadenzaPrestito();
 					break;
 				}
     	          
@@ -694,6 +722,8 @@ public class GestoreMenu implements Serializable
 								break;
 					}
 
+		        	af.decadenzaFruitore();
+		        	ap.scadenzaPrestito();
 					break;
 				}
     	          
@@ -748,6 +778,8 @@ public class GestoreMenu implements Serializable
 	        		        	break;
 					}
 
+		        	af.decadenzaFruitore();
+		        	ap.scadenzaPrestito();
 					break;
 				}
     	        
@@ -775,6 +807,8 @@ public class GestoreMenu implements Serializable
 								break;
 					}
 
+		        	af.decadenzaFruitore();
+		        	ap.scadenzaPrestito();
 					break;
 				}
 
@@ -821,6 +855,8 @@ public class GestoreMenu implements Serializable
      	        		    	break;
 					}
 
+		        	af.decadenzaFruitore();
+		        	ap.scadenzaPrestito();
 					break;
 				}
     	        

@@ -1,11 +1,9 @@
-package it.ing.sw.v3.p3;
+package logica_3;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import it.ing.sw.v3.p1.Fruitore;
-import it.ing.sw.v3.p2.Categoria;
-import it.ing.sw.v3.p2.Risorsa;
+import dominio_3.*;
 
 public class Prestito 
 {
@@ -16,7 +14,7 @@ public class Prestito
 	private Risorsa risorsaInPrestito;
 	private boolean prorogaNonEffettuata;
 	
-    public static final String DESCRIZIONE_PRESTITO = "Categoria della risorsa in prestito:\n%s\nRisorsa presa in prestito:\n%s\nData inizio prestito:\n%s\nData scadenza prestito:\n%s\n";
+    public static final String DESCRIZIONE_PRESTITO = "Categoria della risorsa in prestito: %s\nRisorsa presa in prestito:\n\t\t%s\nData inizio prestito: %s\nData scadenza prestito: %s\n";
 	
 	/**
 	 * Metodo costruttore della classe Prestito
@@ -94,24 +92,27 @@ public class Prestito
      */
     public boolean prorogaPrestito()
     {
-    	   /**
-   	 	* Il primo if verifica che non sia gia' stata effettuata la proroga per il prestito
+     
+    	/**
+   	 	* Il primo if verifica che non sia già stata effettuata la proroga per il prestito
    	 	* Il secondo if verifica che la proroga sia richiesta nel corretto intervallo di tempo
    	 	*/
         if(prorogaNonEffettuata)
    	    {
    	 		if((LocalDate.now().isBefore(dataDiScadenzaPrestito)))
    	 		{
-       	 		if((LocalDate.now().isAfter(dataDiScadenzaPrestito.minusDays(categoriaAssociata.getNumeroGiorniRichiestaProroga()))))
+       	 		LocalDate ld = dataDiScadenzaPrestito.minusDays(categoriaAssociata.getNumeroGiorniRichiestaProroga());
+   	 			
+   	 			if((LocalDate.now().equals(ld)) || (LocalDate.now().isAfter(ld)))
        	 		{
-   	 				setDataDiScadenzaPrestito(LocalDate.now().plusDays(categoriaAssociata.getNumeroMaxGiorniProroga()));
+   	 				setDataDiScadenzaPrestito(dataDiScadenzaPrestito.plusDays(categoriaAssociata.getNumeroMaxGiorniProroga()));
        	 			setProrogaNonEffettuata();
    	 				return true;
        	 		}
        	    }
    	 	}
 	    return false;
-    }
+   	}
 
 	/**
      * Metodo toString() per la creazione di una stringa descrittiva di un prestito
@@ -120,9 +121,13 @@ public class Prestito
     public String toString()
     {
       	StringBuffer ris = new StringBuffer();
-    	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Fruitore.FORMATO_DATA);
-      	
-      	ris.append(String.format(DESCRIZIONE_PRESTITO, categoriaAssociata.getNome(), risorsaInPrestito.toString(), dataDiInizioPrestito.format(formatter), dataDiScadenzaPrestito.format(formatter)));
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Fruitore.FORMATO_DATA);
+  	
+	    String perProroga = "no";
+  	    if(!prorogaNonEffettuata)
+  		      perProroga = "si";
+  	
+  	    ris.append(String.format(DESCRIZIONE_PRESTITO, categoriaAssociata.getNome(), risorsaInPrestito.toString(), dataDiInizioPrestito.format(formatter), dataDiScadenzaPrestito.format(formatter), perProroga));
         return ris.toString();
     } 
     

@@ -1,10 +1,10 @@
-package it.ing.sw.v3.p3;
+package interazione_3;
 
 import java.io.Serializable;
 import java.util.Vector;
 
-import it.ing.sw.v3.p1.*;
-import it.ing.sw.v3.p2.*;
+import dominio_3.*;
+import logica_3.*;
 
 /**
  * Qusta classe contiene dei metodi per la creazione della struttura preimpostata di alcuni aspetti del sistema

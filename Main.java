@@ -1,18 +1,16 @@
-package it.ing.sw.v3.p3;
+package interazione_3;
 
 import java.io.File;
 
-import it.ing.sw.*;
-import it.ing.sw.v3.p1.AnagraficaFruitori;
-import it.ing.sw.v3.p1.AnagraficaOperatori;
-import it.ing.sw.v3.p2.Archivio;
+import logica_3.*;
+import utility.*;
 
 public class Main 
 {
 	public static final String NOME_FILE = "gestoreRisorse.txt";								
 	public static final String MSG_NO_CAST = "ATTENZIONE PROBLEMI CON IL CAST";			
 	public static final String MSG_OK_FILE = "CARICAMENTO DA FILE EFFETTUATO";			
-	public static final String MSG_NO_FILE = "CARICAMENTO DA FILE NON RIUSCITO. OCCORRE CREARE UNA NUOVA ANAGRAFICA DEI FRUITORI";			
+	public static final String MSG_NO_FILE = "CARICAMENTO DA FILE NON RIUSCITO. OCCORRE CREARE UNA NUOVA ANAGRAFICA DEI FRUITORI E UN NUOVO ARCHIVIO DELLE RISORSE";			
 	public static final String MSG_SALVA = "SALVATAGGIO DATI";
 	public static final String ERRORE_CONVERSIONE_DATA = "Attenzione! Si e' verificato un errore di conversione della data";	
 	

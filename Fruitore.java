@@ -1,12 +1,9 @@
-package it.ing.sw.v3.p1;
+package logica_3;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
-
-import it.ing.sw.v3.p3.ArchivioPrestiti;
-import it.ing.sw.v3.p3.Prestito;
 
 /**
  * Questa classe rappresenta il modello di un Fruitore
@@ -91,20 +88,22 @@ public class Fruitore extends Utente implements Serializable
      * il primo verifica che la data corrente preceda quella di scadenza indicata per lo specifico fruitore;
 	 * il secondo verifica che la data corrente succeda quella di scadenza (indicata per lo specifico fruitore) diminuita di un periodo di 10 giorni
      * @param af: l'anagrafica fruitore
-     * @return true se il fruitore può effettuare l'iscrizione
+     * @return true se il fruitore puo' effettuare l'iscrizione
      */
     public boolean rinnovaIscrizione()
     {
-		 if((LocalDate.now().isBefore(dataDiScadenza)))
-		 {
-	        if((LocalDate.now().isAfter(dataDiScadenza.minusDays(DIECI_GIORNI))))
-	 		{
-				setDataDiScadenza(LocalDate.now().plusYears(TERMINE_SCADENZA));
-	 			return true;
-	 		}
-		 }
-		 
-		 return false;
+      	if((LocalDate.now().isBefore(dataDiScadenza))) 
+		{
+			LocalDate ld = dataDiScadenza.minusDays(DIECI_GIORNI);
+			
+			if((LocalDate.now().equals(ld)) || (LocalDate.now().isAfter(ld))) 
+			{
+				setDataDiScadenza(dataDiScadenza.plusYears(Fruitore.TERMINE_SCADENZA));
+				return true;
+			}
+		}
+
+		return false;
     }
     
     /**
