@@ -128,7 +128,7 @@ public class Fruitore extends Utente implements Serializable
     	    	    for(int i = 0; i < ris.size(); i++)
     	    	    {
     	    		   Prestito p = ris.get(i);
-    	   		   r.append(i+1 + ")" + p.toString() +"\n");
+    	    		   r.append(i+1 + ")" + p.toString() +"\n");
     	    	    }
     	    }
     	    

@@ -180,11 +180,11 @@ public class Categoria implements Serializable
    	    	    
    	    	    switch(cr)
    	    	    {
-   	    	        case RIC_PER_TITOLO: if(r.getTitolo().indexOf((String)o) > -1)
+   	    	        case RIC_PER_TITOLO: if(r.getTitolo().toLowerCase().indexOf(((String)o).toLowerCase()) > -1)
    	    	        									risorseCercate.add(r);
    	    	        							  break;
    	    	                       
-   	    	        case RIC_PER_AUTORE_I: if(((Libro)r).getAutore().indexOf((String)o) > -1)
+   	    	        case RIC_PER_AUTORE_I: if(((Libro)r).getAutore().toLowerCase().indexOf(((String)o).toLowerCase()) > -1)
    	    	        									risorseCercate.add(r);
                                        			  break;
    	    	                       

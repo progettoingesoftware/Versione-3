@@ -1,12 +1,15 @@
 package logica_3;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import dominio_3.*;
 
-public class Prestito 
+public class Prestito implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private LocalDate dataDiInizioPrestito;
 	private LocalDate dataDiScadenzaPrestito;
 	private Categoria categoriaAssociata;
@@ -14,7 +17,7 @@ public class Prestito
 	private Risorsa risorsaInPrestito;
 	private boolean prorogaNonEffettuata;
 	
-    public static final String DESCRIZIONE_PRESTITO = "Categoria della risorsa in prestito: %s\nRisorsa presa in prestito:\n\t\t%s\nData inizio prestito: %s\nData scadenza prestito: %s\n";
+    public static final String DESCRIZIONE_PRESTITO = "Categoria della risorsa in prestito: %s\nRisorsa presa in prestito:\n\t\t%s\nData inizio prestito: %s\nData scadenza prestito: %s\nProroga gia' effettuata: %s\n";
 	
 	/**
 	 * Metodo costruttore della classe Prestito
