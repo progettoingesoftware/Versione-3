@@ -17,7 +17,7 @@ public class InserimentoRisorsa implements Serializable
 	
 	public static final String INS_TITOLO = "Inserisci il titolo del libro:\n";
     public static final String INS_NUMLICENZE = "Inserisci il numero delle licenze del libro:\n";
-    public static final String INS_AUTORE = "Inserisci l'autore del libro(uno alla volta):\n";
+    public static final String INS_AUTORE = "Inserisci nome e cognome di un autore del libro:\n";
     public static final String INS_ALTRO_AUTORE = "Vuoi inserire un altro autore (S/N)?\n";
     public static final String INS_NUMPAGINE = "Inserisci il numero delle pagine del libro:\n";
     public static final String INS_ANNOP = "Inserisci l'anno di pubblicazione del libro:\n";
